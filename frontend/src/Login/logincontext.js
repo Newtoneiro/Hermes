@@ -1,10 +1,13 @@
 import {createContext, useReducer, useState} from "react";
+import { publicFetch } from "../fetch";
 
 const LoginContext = createContext()
 
 const LoginProvider = ({children})=>{
     const initialState = {username: '',
                           password: ''}
+    
+    const [message, setMessage] = useState({username: '', password: ''})
     const [inputs, setInputs] = useState([0, 0]);
 
     function reducer(state, action){
@@ -13,10 +16,12 @@ const LoginProvider = ({children})=>{
             case 'set_username':
                 new_inputs[0] = 0
                 setInputs(new_inputs)
+                setMessage({...message, username: ''})
                 return {...state, username: action.payload}
             case 'set_password':
                 new_inputs[1] = 0
                 setInputs(new_inputs)
+                setMessage({...message, password: ''})
                 return {...state, password: action.payload}
             default:
                 throw new Error('Bad action')
@@ -24,42 +29,59 @@ const LoginProvider = ({children})=>{
     }
 
     const [crudentials, dispatch] = useReducer(reducer, initialState);
-
         const checkCrudentials = () => {
-        var new_inputs = [0, 0]
-        if (crudentials.username === ''){
-            new_inputs[0] = 1;
+            var new_inputs = [0, 0]
+            var new_message = {username: '', password: ''}
+            if (crudentials.username === ''){
+                new_inputs[0] = 1;
+                new_message.username = 'Enter username'
+            }
+            if (crudentials.password === ''){
+                new_inputs[1] = 1;
+                new_message.password = 'Enter password'
+            }
+            setInputs(new_inputs);
+            setMessage(new_message);
+            if (new_inputs.includes(1)){
+                return 0;
+            }
+            else{
+                return 1;
+            }
         }
-        if (crudentials.password === ''){
-            new_inputs[1] = 1;
-        }
-        setInputs(new_inputs)
-        if (new_inputs.includes(1)){
-            return 0;
-        }
-        else{
-            return 1;
-        }
-    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (checkCrudentials()){
-            console.log(crudentials)
+            const { data } = await publicFetch.post('users/verify', crudentials);
+            if (data.result >= 0){
+                console.log('dupa')
+            }
+            else{
+                var new_inputs = inputs
+                switch (data.result){
+                    case -1:
+                        new_inputs[0] = 1;
+                        setMessage({...message, username: 'Username doesn\'t exist'})
+                        break;
+                    case -2:
+                        setMessage({...message, password: 'Incorrect password'})
+                        new_inputs[1] = 1;
+                        break;
+                    default:
+                        break;
+                    }
+                setInputs(new_inputs)
+            }
         }
-        // axios.post('/addUser', {
-        //     username: username,
-        //     password: password,
-        // }).then((response) => {
-        //     console.log(response);
-        // })
     }
 
     return <LoginContext.Provider value={{
         inputs,
         crudentials,
         dispatch,
-        handleSubmit
+        handleSubmit,
+        message
     }}>
         {children}
     </LoginContext.Provider>

@@ -1,3 +1,12 @@
+@keyframes slide_in {
+  0% {
+    transform: translateY(-50px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
 .Login_main {
   width: 400px;
   height: auto;
@@ -14,6 +23,7 @@
   -webkit-box-shadow: 8px 8px 24px 0px rgb(0, 0, 0);
   -moz-box-shadow: 8px 8px 24px 0px rgb(0, 0, 0);
   box-shadow: 8px 8px 24px 0px rgb(0, 0, 0);
+  animation: slide_in 0.5s;
 }
 
 .Login_main-header {
@@ -36,7 +46,7 @@
 }
 
 .Login_main-input_box {
-  padding: 1em 2em;
+  padding: 1em 2em 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -63,6 +73,12 @@
   transition: 0.5s;
 }
 
+.Login_main-input_box p {
+  text-align: center;
+  height: 0.1em;
+  width: 100%;
+}
+
 .Login_main-input_box-incorrect input {
   border-color: var(--default-colour-4);
   transition: 0.5s;
@@ -74,7 +90,7 @@
 }
 
 .Login_main-submit {
-  margin-top: 0.5em;
+  margin-top: 1em;
   padding: 0 1.5em;
   margin-bottom: 1em;
   width: auto;
