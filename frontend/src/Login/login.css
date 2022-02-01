@@ -1,0 +1,121 @@
+.Login_main {
+  width: 400px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  background-color: var(--default-colour-3);
+
+  font-family: var(--font-family);
+  letter-spacing: 2px;
+
+  -webkit-box-shadow: 8px 8px 24px 0px rgb(0, 0, 0);
+  -moz-box-shadow: 8px 8px 24px 0px rgb(0, 0, 0);
+  box-shadow: 8px 8px 24px 0px rgb(0, 0, 0);
+}
+
+.Login_main-header {
+  background-color: var(--default-colour-2);
+  width: 100%;
+  text-align: center;
+  color: white;
+  border: none;
+  flex-grow: 1;
+}
+
+.Login_main-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  flex-grow: 5;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.Login_main-input_box {
+  padding: 1em 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.Login_main-input_box label {
+  transition: 0.5s;
+}
+
+.Login_main-input_box input {
+  appearance: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  height: 30px;
+  background-color: var(--default-colour-3);
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  outline: none;
+  font-size: 20px;
+  transition: 0.5s;
+}
+
+.Login_main-input_box-incorrect input {
+  border-color: var(--default-colour-4);
+  transition: 0.5s;
+}
+
+.Login_main-input_box-incorrect label {
+  color: var(--default-colour-4);
+  transition: 0.5s;
+}
+
+.Login_main-submit {
+  margin-top: 0.5em;
+  padding: 0 1.5em;
+  margin-bottom: 1em;
+  width: auto;
+  height: 100%;
+}
+
+.Login_main-submit button {
+  width: 100%;
+  height: 40px;
+  border: none;
+  outline: none;
+  border-radius: 2px;
+  background-color: var(--default-colour-4);
+  letter-spacing: 2px;
+  font-size: 20px;
+  color: var(--default-colour-3);
+  transition: 0.5s;
+}
+
+.Login_main-submit button:hover {
+  background-color: var(--default-colour-5);
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.Login_main-register {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 50px;
+  background-color: var(--default-colout-6);
+}
+
+.Login_main-register h3 {
+  font-size: 15px;
+}
+
+.Login_main-register a {
+  font-weight: 800;
+  text-decoration: none;
+  color: var(--default-colour-3);
+}

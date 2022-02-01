@@ -1,0 +1,13 @@
+:root {
+  --default-colour-1: rgb(216, 58, 58);
+  --default-colour-2: rgb(36, 35, 35);
+  --default-colour-3: rgb(245, 245, 245);
+  --default-colour-4: rgb(252, 50, 50);
+  --default-colour-5: rgb(187, 23, 23);
+  --default-colout-6: rgb(150, 150, 150);
+  --font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: var(--default-colour-1);
+}
