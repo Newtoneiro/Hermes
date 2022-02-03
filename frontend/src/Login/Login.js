@@ -1,13 +1,24 @@
 import React from 'react';
 import { useContext } from 'react';
-import { Link } from 'react-router-dom'
-import "./login.css"
+import { Link, Redirect } from 'react-router-dom';
 import { LoginContext } from './logincontext';
+import Loading from '../Loading/Loading';
+import { AuthContext } from '../AuthContext/Authcontext';
+
+import "./login.css"
 
 const Login = () => {
     const LoginCon = useContext(LoginContext)
+    const AuthCon = useContext(AuthContext)
+
+    const handleSubmit = async (e) => {
+        const data = await LoginCon.handleSubmit(e);
+        AuthCon.setAuthInfo(data)
+        LoginCon.setRedirectOnLogin(true)
+    }
 
     return <>
+        {LoginCon.redirectOnLogin && <Redirect to='/'/>}
         <div className='Login_main'>
             <div className='Login_main-header'>
                 <h1>Login to Hermes</h1>
@@ -24,7 +35,7 @@ const Login = () => {
                     <p>{LoginCon.message.password}</p>
                 </div>
                 <div className='Login_main-submit'>
-                    <button type='submit' onClick={(e) => LoginCon.handleSubmit(e)}>Login</button>
+                    <button type='submit' onClick={(e) => handleSubmit(e)}>{LoginCon.loading?<Loading/>:'Login'}</button>
                 </div>
             </form>
             <div className='Login_main-register'>

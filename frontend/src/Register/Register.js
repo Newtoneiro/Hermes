@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { RegisterContext } from './registercontext';
 import { Redirect } from 'react-router-dom';
+import Loading from '../Loading/Loading';
 
 
 const Register = () => {
@@ -35,7 +36,7 @@ const Register = () => {
                 <p>{RegisterCon.message.confirm_password}</p>
             </div>
             <div className='Login_main-submit'>
-                <button type='submit' onClick={(e) => RegisterCon.handleSubmit(e)}>Register</button>
+                <button type='submit' onClick={(e) => RegisterCon.handleSubmit(e)}>{RegisterCon.loading?<Loading/>:'Register'}</button>
             </div>
         </form>
         <div className='Login_main-register'>

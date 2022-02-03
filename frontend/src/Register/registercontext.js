@@ -13,6 +13,8 @@ const RegisterProvider = ({children})=>{
     const [inputs, setInputs] = useState([0, 0, 0, 0]);
     const [redirectOnRegister, setRedirectOnRegister] = useState(false)
 
+    const [loading, setLoading] = useState(false)
+
     function reducer(state, action){
         var new_inputs = inputs
         switch (action.type) {
@@ -78,12 +80,14 @@ const RegisterProvider = ({children})=>{
     }
 
     const handleSubmit = async (e) => {
+        setLoading(true)
         e.preventDefault()
         if (checkCrudentials()){
             const { data } = await publicFetch.post('users/register', crudentials);
             console.log(data)
             if (data.result >= 0) {
                 setRedirectOnRegister(true)
+                setLoading(false)
             }
             else {
                 var new_inputs = inputs
@@ -102,6 +106,7 @@ const RegisterProvider = ({children})=>{
                 setInputs(new_inputs)
             }
         }
+        setLoading(false)
     } 
     return <RegisterContext.Provider value={{
         inputs,
@@ -109,7 +114,8 @@ const RegisterProvider = ({children})=>{
         dispatch,
         handleSubmit,
         message,
-        redirectOnRegister
+        redirectOnRegister,
+        loading
     }}>
         {children}
     </RegisterContext.Provider>

@@ -4,6 +4,12 @@ const bcrypt = require("bcrypt")
 const uuid = require("uuid")
 const db = require('./database');
 const app = express();
+const jwtDecode = require('jwt-decode')
+require('dotenv').config()
+
+const {
+  createToken,
+} = require('./utils');
 
 app.use(express.json())
 app.use(
@@ -42,10 +48,19 @@ app.post('/users/register', async (req, res) => {
 
 app.post('/users/verify', async (req, res) => {
   const {username, password} = req.body;
-  const response = await db.promise().query(`SELECT password FROM USERS WHERE username = '${username}'`)
+  const response = await db.promise().query(`SELECT * FROM USERS WHERE username = '${username}'`)
   if (response[0][0]){
     if (bcrypt.compareSync(password, response[0][0].password)){
-      res.send({result: 0})
+      const userInfo = {email: response[0][0].email, username: response[0][0].username, role: response[0][0].role}
+      const token = createToken(userInfo);
+      const decodedToken = jwtDecode(token);
+      const expiresAt = decodedToken.exp;
+      res.json({
+        result: 0,
+        token,
+        userInfo,
+        expiresAt
+      });
     }
     else{
       res.send({result: -2})
@@ -54,6 +69,4 @@ app.post('/users/verify', async (req, res) => {
   else{
     res.send({result: -1})
   }
-
-
 })

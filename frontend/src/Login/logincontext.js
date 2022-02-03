@@ -1,14 +1,16 @@
-import {createContext, useReducer, useState} from "react";
+import {createContext, useReducer, useState } from "react";
 import { publicFetch } from "../fetch";
 
 const LoginContext = createContext()
 
-const LoginProvider = ({children})=>{
+const LoginProvider = ({children})=>{    
     const initialState = {username: '',
                           password: ''}
     
     const [message, setMessage] = useState({username: '', password: ''})
     const [inputs, setInputs] = useState([0, 0]);
+    const [loading, setLoading] = useState(false)
+    const [redirectOnLogin, setRedirectOnLogin] = useState(false)
 
     function reducer(state, action){
         var new_inputs = inputs;
@@ -52,10 +54,12 @@ const LoginProvider = ({children})=>{
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true)
         if (checkCrudentials()){
             const { data } = await publicFetch.post('users/verify', crudentials);
             if (data.result >= 0){
-                console.log('dupa')
+                setLoading(false)
+                return data;
             }
             else{
                 var new_inputs = inputs
@@ -74,6 +78,7 @@ const LoginProvider = ({children})=>{
                 setInputs(new_inputs)
             }
         }
+        setLoading(false)
     }
 
     return <LoginContext.Provider value={{
@@ -81,7 +86,10 @@ const LoginProvider = ({children})=>{
         crudentials,
         dispatch,
         handleSubmit,
-        message
+        message,
+        loading,
+        redirectOnLogin,
+        setRedirectOnLogin
     }}>
         {children}
     </LoginContext.Provider>
