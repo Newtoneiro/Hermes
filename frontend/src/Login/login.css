@@ -8,6 +8,7 @@
 }
 
 .Login_main {
+  margin-top: 10rem;
   width: 400px;
   height: auto;
   display: flex;

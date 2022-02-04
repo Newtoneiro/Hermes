@@ -6,7 +6,7 @@ import "./app.css"
 import { LoginProvider } from '../Login/logincontext';
 import { RegisterProvider } from '../Register/registercontext';
 import { AuthProvider } from '../AuthContext/Authcontext';
-import Home from '../Pages/Home';
+import Home from '../Pages/Home/Home';
 
 const App = () => {
   let { path, url } = useRouteMatch();
@@ -29,7 +29,7 @@ const App = () => {
           </Route>
         </Switch>
       </AuthProvider>
-    </div>;
+    </div>
   </>
 };
 

@@ -37,10 +37,22 @@ const AuthProvider = ({children}) => {
         return new Date().getTime() / 1000 < authState.expiresAt;
     }
 
+    const logout = () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('userInfo')
+        localStorage.removeItem('expiresAt')
+        setAuthState({
+            token: null,
+            expiresAt: null,
+            userInfo: {}
+        })
+    }
+
     return <AuthContext.Provider value = {{
         authState,
         setAuthInfo,
-        isAuthenticated
+        isAuthenticated,
+        logout
     }}>
     {children}
     </AuthContext.Provider>
