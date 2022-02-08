@@ -8,7 +8,6 @@
 }
 
 .Login_main {
-  margin-top: 10rem;
   width: 400px;
   height: auto;
   display: flex;
@@ -132,7 +131,8 @@
 }
 
 .Login_main-register a {
-  font-weight: 800;
+  font-weight: 900;
+  font-size: 20px;
   text-decoration: none;
-  color: var(--default-colour-3);
+  color: var(--default-colour-4);
 }

@@ -1,34 +1,40 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Login from '../Login/Login';
 import Register from '../Register/Register'
-import { Route, Switch, useRouteMatch} from 'react-router-dom'
+import { Redirect, Route, Switch, useRouteMatch} from 'react-router-dom'
 import "./app.css"
 import { LoginProvider } from '../Login/logincontext';
 import { RegisterProvider } from '../Register/registercontext';
-import { AuthProvider } from '../AuthContext/Authcontext';
+import { AuthContext } from '../AuthContext/Authcontext';
 import Home from '../Pages/Home/Home';
+import MainPanel from '../Pages/MainPanel/MainPanel';
 
 const App = () => {
   let { path, url } = useRouteMatch();
+  const AuthCon = useContext(AuthContext)
   return <>
     <div className='App_main'>
-      <AuthProvider>
         <Switch>
-          <Route path={`${path}login`}>
+          <Route path={`${path}login`} render={ () =>
+            AuthCon.isAuthenticated() ? <Redirect to='/'/> :
             <LoginProvider>
               <Login/>
             </LoginProvider>
+          }>
           </Route>
-          <Route path={`${path}register`}>
+          <Route path={`${path}register`} render={ () =>
+            AuthCon.isAuthenticated() ? <Redirect to='/'/> :
             <RegisterProvider>
               <Register/>
             </RegisterProvider>
+          }>
           </Route>
-          <Route path='*'>
+          <Route path='*' render={ () => 
+            AuthCon.isAuthenticated() ? <MainPanel/> :
             <Home/>
+          }>
           </Route>
         </Switch>
-      </AuthProvider>
     </div>
   </>
 };

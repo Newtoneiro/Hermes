@@ -1,0 +1,52 @@
+.friendlist_main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 1em 1em;
+
+  min-width: 300px;
+  min-height: 200px;
+
+  background-color: var(--default-colour-2);
+  -webkit-box-shadow: 0px 2px 12px 0px var(--default-colour-2);
+  -moz-box-shadow: 0px 2px 12px 0px var(--default-colour-2);
+  box-shadow: 0px 2px 12px 0px var(--default-colour-2);
+}
+
+.friendlist_navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.friendlist_navbar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--default-colour-1);
+  outline: none;
+  border: none;
+  border-radius: 1px;
+
+  padding: 0.5em;
+  font-size: 20px;
+  width: 30%;
+  color: var(--default-colour-3);
+  transition: 0.5s;
+}
+
+.friendlist_navbar-button:hover {
+  background-color: var(--default-colour-5);
+  transform: scale(1.1);
+  transition: 0.5s;
+}
+
+.friendlist_navbar-footer {
+  margin: 0.5em 0;
+  width: 80%;
+  height: 0.1em;
+  background-color: var(--default-colour-3);
+}

@@ -6,11 +6,11 @@ const createToken = (user) => {
   }
   return jwt.sign(
     {
-      sub: user._id,
+      id: user.id,
       email: user.email,
       role: user.role,
-      iss: 'api.orbit',
-      aud: 'api.orbit'
+      iss: 'api.hermes',
+      aud: 'api.hermes',
     },
     process.env.JWT_SECRET,
     { algorithm: 'HS256', expiresIn: '1h' }

@@ -1,5 +1,5 @@
 import {createContext, useReducer, useState} from "react";
-import { publicFetch } from "../fetch";
+import { publicFetch } from "../Fetch/fetch";
 
 const RegisterContext = createContext()
 

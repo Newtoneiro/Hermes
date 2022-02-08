@@ -1,0 +1,83 @@
+.addfriend_main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.addfriend_input-box {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addfriend_input-box-input {
+  width: 90%;
+  height: 2em;
+  padding: 0.5em;
+  outline: none;
+  border: none;
+  border-radius: 5px 0 0 5px;
+  letter-spacing: 1px;
+
+  background-color: var(--default-colour-3);
+}
+
+.addfriend_input-box-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--default-colour-1);
+  outline: none;
+  border: none;
+  border-radius: 0 5px 5px 0;
+
+  padding: 0.5em;
+  font-size: 20px;
+  width: 60px;
+  color: var(--default-colour-3);
+  transition: 0.5s;
+}
+
+.addfriend_input-box-button:hover {
+  background-color: var(--default-colour-5);
+  transform: scale(1.1);
+  transition: 0.5s;
+}
+
+.addfriend_userlist {
+  margin-top: 0.5em;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.addfriend_userlist-user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  font-family: var(--font-family);
+  background-color: var(--default-colour-3);
+  width: 80%;
+  height: 3em;
+  border-radius: 5px;
+  margin: 0.3em 0;
+  padding: 0 1em;
+  letter-spacing: 2px;
+}
+
+.addfriend_userlist-user-add {
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.addfriend_userlist-user-add:hover {
+  color: var(--default-colour-1);
+  transition: 0.5s;
+}
