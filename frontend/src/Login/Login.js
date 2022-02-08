@@ -13,8 +13,10 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         const data = await LoginCon.handleSubmit(e);
-        AuthCon.setAuthInfo(data)
-        LoginCon.setRedirectOnLogin(true)
+        if (data){
+            AuthCon.setAuthInfo(data)
+            // LoginCon.setRedirectOnLogin(true)
+        }
     }
 
     return <>

@@ -86,8 +86,8 @@ const RegisterProvider = ({children})=>{
             const { data } = await publicFetch.post('users/register', crudentials);
             console.log(data)
             if (data.result >= 0) {
-                setRedirectOnRegister(true)
                 setLoading(false)
+                return data
             }
             else {
                 var new_inputs = inputs
@@ -115,6 +115,7 @@ const RegisterProvider = ({children})=>{
         handleSubmit,
         message,
         redirectOnRegister,
+        setRedirectOnRegister,
         loading
     }}>
         {children}

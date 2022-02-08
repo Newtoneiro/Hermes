@@ -6,7 +6,9 @@ import './mainpanel.css'
 const MainPanel = () => {
   return <>
     <Navbar/>
-    <Friendlist/>
+    <div className='mainpanel_main'>
+      <Friendlist/>
+    </div>
   </>;
 };
 

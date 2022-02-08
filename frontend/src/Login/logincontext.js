@@ -13,16 +13,13 @@ const LoginProvider = ({children})=>{
     const [redirectOnLogin, setRedirectOnLogin] = useState(false)
 
     function reducer(state, action){
-        var new_inputs = inputs;
         switch (action.type) {
             case 'set_username':
-                new_inputs[0] = 0
-                setInputs(new_inputs)
+                setInputs((state) => {state[0] = 0; return state;})
                 setMessage({...message, username: ''})
                 return {...state, username: action.payload}
             case 'set_password':
-                new_inputs[1] = 0
-                setInputs(new_inputs)
+                setInputs((state) => {state[1] = 0; return state;})
                 setMessage({...message, password: ''})
                 return {...state, password: action.payload}
             default:

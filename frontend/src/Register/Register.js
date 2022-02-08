@@ -8,6 +8,13 @@ import Loading from '../Loading/Loading';
 const Register = () => {
   const RegisterCon = useContext(RegisterContext)
 
+  const handleSubmit = async (e) => {
+      const data = await RegisterCon.handleSubmit(e);
+      if (data){
+          RegisterCon.setRedirectOnRegister(true)
+      }
+  }
+
   return <>
     {RegisterCon.redirectOnRegister && <Redirect to='/login'/>}
         <div className='Login_main'>
@@ -36,7 +43,7 @@ const Register = () => {
                 <p>{RegisterCon.message.confirm_password}</p>
             </div>
             <div className='Login_main-submit'>
-                <button type='submit' onClick={(e) => RegisterCon.handleSubmit(e)}>{RegisterCon.loading?<Loading/>:'Register'}</button>
+                <button type='submit' onClick={(e) => handleSubmit(e)}>{RegisterCon.loading?<Loading/>:'Register'}</button>
             </div>
         </form>
         <div className='Login_main-register'>
