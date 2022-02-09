@@ -1,20 +1,45 @@
+@keyframes slide-left {
+  0% {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 .Sidepanel_main {
   display: flex;
   flex-direction: column;
   align-items: center;
 
   padding: 1em 1em;
+  margin: 25px;
   width: 30%;
   min-width: 300px;
   min-height: 200px;
 }
 
 .Sidepanel_navbar {
+  background: -webkit-linear-gradient(
+    left,
+    var(--default-colour-6),
+    var(--default-colour-7)
+  );
+  padding: 1em 0;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-around;
+  border-radius: 10px;
   z-index: 20;
+
+  -webkit-box-shadow: -1px -1px 0px 0px rgba(143, 143, 150, 1);
+  -moz-box-shadow: -1px -1px 0px 0px rgba(143, 143, 150, 1);
+  box-shadow: -1px -1px 0px 0px rgba(143, 143, 150, 1);
 }
 
 .Sidepanel_navbar-button {
@@ -22,18 +47,21 @@
   align-items: center;
   justify-content: center;
 
-  background-color: var(--default-colour-1);
   outline: none;
   border: none;
-  border-radius: 1px;
+  border-radius: 10px;
 
   font-size: 20px;
   padding: 0.5em 0;
-  width: 30%;
+  width: 25%;
   color: var(--default-colour-3);
   transition: 0.5s;
 
   cursor: pointer;
+}
+
+.selected {
+  background-color: var(--default-colour-1);
 }
 
 .Sidepanel_navbar-button:hover {
@@ -43,8 +71,26 @@
 }
 
 .Sidepanel_navbar-footer {
-  margin: 0.5em 0;
-  width: 80%;
+  margin: 1em 0;
+  width: 90%;
   height: 0.1em;
   background-color: var(--default-colour-3);
+}
+
+.Sidepanel_list {
+  width: 100%;
+  height: 100%;
+  min-height: 70vh;
+
+  background: -webkit-linear-gradient(
+    20deg,
+    var(--default-colour-6) 0%,
+    var(--default-colour-7) 80%
+  );
+
+  padding: 1em 0;
+  -webkit-box-shadow: -1px -1px 0px 0px rgba(143, 143, 150, 1);
+  -moz-box-shadow: -1px -1px 0px 0px rgba(143, 143, 150, 1);
+  box-shadow: -1px -1px 0px 0px rgba(143, 143, 150, 1);
+  border-radius: 10px;
 }

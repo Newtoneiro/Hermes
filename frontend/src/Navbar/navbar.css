@@ -73,14 +73,14 @@
 .navbar_login-link_button {
   border: none;
   outline: none;
-  background-color: var(--default-colour-1);
+  background-color: var(--default-colour-5);
   border-radius: 20px;
   padding: 0.1em 1em;
   transition: 0.5s;
 }
 
 .navbar_login-link_button:hover {
-  background-color: var(--default-colour-5);
+  background-color: var(--default-colour-4);
   transition: 0.5s;
 }
 

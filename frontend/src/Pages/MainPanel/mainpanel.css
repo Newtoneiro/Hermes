@@ -1,6 +1,7 @@
 .mainpanel_main {
   width: 100%;
   height: 100%;
-  background-color: var(--default-colour-4);
+  /* background: linear-gradient(var(--default-colour-4), var(--default-colour-5)); */
+  background-color: var(--default-colour-8);
   margin-top: 4em;
 }

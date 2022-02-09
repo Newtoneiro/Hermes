@@ -7,6 +7,7 @@
 
   font-family: var(--font-family);
   font-weight: 800;
+  animation: slide-left 0.7s;
 }
 
 .Friendlist_main h2 {

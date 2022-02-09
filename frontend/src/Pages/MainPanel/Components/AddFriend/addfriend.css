@@ -4,10 +4,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  animation: slide-left 0.7s;
 }
 
 .addfriend_input-box {
-  width: 90%;
+  width: 85%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,7 +75,7 @@
 }
 
 .addfriend_userlist-user:hover {
-  background-color: var(--default-colour-6);
+  background-color: var(--default-colour-9);
   transition: 0.5s;
 }
 

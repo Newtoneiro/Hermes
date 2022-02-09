@@ -4,6 +4,13 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  font-family: var(--font-family);
+  font-weight: 800;
+  animation: slide-left 0.7s;
+}
+
+.FriendRequests_main h2 {
+  color: var(--default-colour-3);
 }
 
 .FriendRequest_main_instance {
@@ -11,8 +18,6 @@
   align-items: center;
   justify-content: space-between;
 
-  font-family: var(--font-family);
-  font-weight: 800;
   background-color: var(--default-colour-3);
   width: 80%;
   height: 3em;

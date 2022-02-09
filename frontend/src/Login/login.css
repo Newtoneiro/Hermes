@@ -103,17 +103,17 @@
   border: none;
   outline: none;
   border-radius: 2px;
-  background-color: var(--default-colour-4);
+  background-color: var(--default-colour-5);
   letter-spacing: 2px;
   font-size: 20px;
   color: var(--default-colour-3);
+  cursor: pointer;
   transition: 0.5s;
 }
 
 .Login_main-submit button:hover {
-  background-color: var(--default-colour-5);
+  background-color: var(--default-colour-4);
   transition: 0.5s;
-  cursor: pointer;
 }
 
 .Login_main-register {

@@ -1,11 +1,13 @@
 :root {
   --default-colour-1: rgb(163, 117, 246);
-  --default-colour-2: rgb(36, 35, 35);
+  --default-colour-2: rgb(15, 15, 15);
   --default-colour-3: rgb(245, 245, 245);
   --default-colour-4: rgb(115, 30, 251);
-  --default-colour-5: rgb(52, 10, 167);
-  --default-colour-6: rgb(150, 150, 150);
-  --default-colour-7: rgb(71, 70, 70);
+  --default-colour-5: rgb(104, 70, 197);
+  --default-colour-6: rgb(65, 65, 70);
+  --default-colour-7: rgb(28, 28, 28);
+  --default-colour-8: rgb(37, 37, 37);
+  --default-colour-9: rgb(150, 150, 150);
   --font-family: "Poppins", sans-serif;
 }
 
