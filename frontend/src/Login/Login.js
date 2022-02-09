@@ -15,7 +15,6 @@ const Login = () => {
         const data = await LoginCon.handleSubmit(e);
         if (data){
             AuthCon.setAuthInfo(data)
-            // LoginCon.setRedirectOnLogin(true)
         }
     }
 

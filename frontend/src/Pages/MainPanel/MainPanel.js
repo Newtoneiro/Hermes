@@ -1,13 +1,13 @@
 import React from 'react';
 import Navbar from '../../Navbar/Navbar';
-import Friendlist from './Components/Friendlist/Friendlist';
+import Sidepanel from './Components/Sidepanel/Sidepanel';
 import './mainpanel.css'
 
 const MainPanel = () => {
   return <>
     <Navbar/>
     <div className='mainpanel_main'>
-      <Friendlist/>
+      <Sidepanel/>
     </div>
   </>;
 };

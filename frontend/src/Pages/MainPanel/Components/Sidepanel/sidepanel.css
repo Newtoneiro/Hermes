@@ -1,0 +1,50 @@
+.Sidepanel_main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 1em 1em;
+  width: 30%;
+  min-width: 300px;
+  min-height: 200px;
+}
+
+.Sidepanel_navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 20;
+}
+
+.Sidepanel_navbar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--default-colour-1);
+  outline: none;
+  border: none;
+  border-radius: 1px;
+
+  font-size: 20px;
+  padding: 0.5em 0;
+  width: 30%;
+  color: var(--default-colour-3);
+  transition: 0.5s;
+
+  cursor: pointer;
+}
+
+.Sidepanel_navbar-button:hover {
+  background-color: var(--default-colour-5);
+  transform: scale(1.1);
+  transition: 0.5s;
+}
+
+.Sidepanel_navbar-footer {
+  margin: 0.5em 0;
+  width: 80%;
+  height: 0.1em;
+  background-color: var(--default-colour-3);
+}

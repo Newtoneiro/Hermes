@@ -15,6 +15,14 @@ const RegisterProvider = ({children})=>{
 
     const [loading, setLoading] = useState(false)
 
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+        };
+
     function reducer(state, action){
         var new_inputs = inputs
         switch (action.type) {
@@ -52,9 +60,21 @@ const RegisterProvider = ({children})=>{
             new_inputs[0] = 1;
             new_message.username = 'Enter username';
         }
+        if (crudentials.username.length > 8){
+            new_inputs[0] = 1;
+            new_message.username = 'Username too long';
+        }
+        if (!crudentials.username.match("^[A-Za-z0-9]+$")){
+            new_inputs[0] = 1;
+            new_message.username = 'Only letters and nubmers allowed';
+        }
         if (crudentials.email === ''){
             new_inputs[1] = 1;
             new_message.email = 'Enter email';
+        }
+        if (!validateEmail(crudentials.email)){
+            new_inputs[1] = 1;
+            new_message.email = 'Invalid email';
         }
         if (crudentials.password === ''){
             new_inputs[2] = 1;
@@ -84,7 +104,6 @@ const RegisterProvider = ({children})=>{
         e.preventDefault()
         if (checkCrudentials()){
             const { data } = await publicFetch.post('users/register', crudentials);
-            console.log(data)
             if (data.result >= 0) {
                 setLoading(false)
                 return data

@@ -1,19 +1,12 @@
-.Friendlist_main {
+.FriendRequests_main {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-
-  font-family: var(--font-family);
-  font-weight: 800;
 }
 
-.Friendlist_main h2 {
-  color: var(--default-colour-3);
-}
-
-.Friendlist_main-friend {
+.FriendRequest_main_instance {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -27,5 +20,30 @@
   margin: 0.3em 0;
   padding: 0 1em;
   letter-spacing: 2px;
+  transition: 0.5s;
+}
+
+.FriendRequest_main_instance-buttons {
+  display: flex;
+  width: 20%;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.decline,
+.accept {
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.decline:hover {
+  color: brown;
+  transform: scale(1.1);
+  transition: 0.5s;
+}
+
+.accept:hover {
+  color: rgb(16, 107, 4);
+  transform: scale(1.1);
   transition: 0.5s;
 }

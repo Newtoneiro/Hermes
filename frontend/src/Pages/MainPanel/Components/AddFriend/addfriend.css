@@ -87,3 +87,18 @@
   color: var(--default-colour-1);
   transition: 0.5s;
 }
+
+.addfriend_message {
+  margin-top: 0.5em;
+  width: 100%;
+  height: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: var(--font-family);
+  font-size: 10px;
+  color: var(--default-colour-3);
+  font-weight: 800;
+  letter-spacing: 2px;
+}
