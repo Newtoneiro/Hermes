@@ -60,11 +60,11 @@ const RegisterProvider = ({children})=>{
             new_inputs[0] = 1;
             new_message.username = 'Enter username';
         }
-        if (crudentials.username.length > 8){
+        else if (crudentials.username.length > 8){
             new_inputs[0] = 1;
             new_message.username = 'Username too long';
         }
-        if (!crudentials.username.match("^[A-Za-z0-9]+$")){
+        else if (!crudentials.username.match("^[A-Za-z0-9]+$")){
             new_inputs[0] = 1;
             new_message.username = 'Only letters and nubmers allowed';
         }
@@ -72,7 +72,7 @@ const RegisterProvider = ({children})=>{
             new_inputs[1] = 1;
             new_message.email = 'Enter email';
         }
-        if (!validateEmail(crudentials.email)){
+        else if (!validateEmail(crudentials.email)){
             new_inputs[1] = 1;
             new_message.email = 'Invalid email';
         }

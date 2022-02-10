@@ -80,12 +80,12 @@
 }
 
 .Login_main-input_box-incorrect input {
-  border-color: var(--default-colour-4);
+  border-color: var(--default-colour-10);
   transition: 0.5s;
 }
 
 .Login_main-input_box-incorrect label {
-  color: var(--default-colour-4);
+  color: var(--default-colour-10);
   transition: 0.5s;
 }
 

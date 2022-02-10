@@ -1,27 +1,22 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useEffect } from 'react';
 import axios from 'axios';
-import { AuthContext } from '../AuthContext/Authcontext';
 
 const FetchContext = createContext();
 const { Provider } = FetchContext;
 
 const FetchProvider = ({ children }) => {
-    const authCon = useContext(AuthContext);
     const authFetch = axios.create({
-        baseURL: "http://localhost:8080",
+        baseURL: "/api",
     });
 
-    authFetch.interceptors.request.use(
-        config => {
-        config.headers.Authorization = `Bearer ${authCon.authState.token}`;
-        config.headers.issuer = "api-hermes";
-        config.headers.audience = "api-hermes";
-        return config;
-        },
-        error => {
-        return Promise.reject(error);
-        }
-    );
+    useEffect(() => {
+      const getCsrfToken = async () => {
+        const {data} = await authFetch.get('/csrf-token')
+        authFetch.defaults.headers['X-CSRF-Token'] = data.csrfToken;
+      }
+
+      getCsrfToken();
+    }, [])
 
   authFetch.interceptors.response.use(
     response => {

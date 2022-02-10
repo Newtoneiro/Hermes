@@ -47,7 +47,8 @@ const AddFriend = () => {
                 <h2>{user.username}</h2>
                 <AiOutlinePlus onClick={() => handleClick(user.user_id)} className='addfriend_userlist-user-add'/>
             </div>
-        })}
+          })
+        }
       </div>
   </div>;
 };

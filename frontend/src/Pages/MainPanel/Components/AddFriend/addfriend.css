@@ -1,5 +1,6 @@
 .addfriend_main {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -50,12 +51,14 @@
 }
 
 .addfriend_userlist {
-  margin-top: 0.5em;
+  margin: 0.5em 0.4em 0.4em 0;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  overflow-y: scroll;
 }
 
 .addfriend_userlist-user {
@@ -72,6 +75,7 @@
   padding: 0 1em;
   letter-spacing: 2px;
   transition: 0.5s;
+  animation: slide-left 0.7s;
 }
 
 .addfriend_userlist-user:hover {

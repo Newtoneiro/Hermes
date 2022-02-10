@@ -47,8 +47,8 @@ const FriendRequests = () => {
     }
 
     return <div className='FriendRequests_main'>
-        {loading && <Loading/>}
-        {requests.length === 0?
+        {loading ?<Loading/>:
+        requests.length === 0?
         <h2>No pending requests</h2>
         :requests.map((req) => {
             return <div key={req.friendships_requests_id} className='FriendRequest_main_instance'>

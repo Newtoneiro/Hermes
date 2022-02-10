@@ -8,6 +8,7 @@
   --default-colour-7: rgb(28, 28, 28);
   --default-colour-8: rgb(37, 37, 37);
   --default-colour-9: rgb(150, 150, 150);
+  --default-colour-10: rgb(216, 51, 51);
   --font-family: "Poppins", sans-serif;
 }
 
@@ -16,4 +17,14 @@ body {
   margin: 0;
   background: url("./resources/wersja\ 2.png");
   background-size: cover;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--default-colour-6);
+  border-radius: 5px;
 }
