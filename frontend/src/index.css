@@ -1,14 +1,21 @@
 :root {
-  --default-colour-1: rgb(163, 117, 246);
-  --default-colour-2: rgb(15, 15, 15);
-  --default-colour-3: rgb(245, 245, 245);
-  --default-colour-4: rgb(115, 30, 251);
-  --default-colour-5: rgb(104, 70, 197);
-  --default-colour-6: rgb(65, 65, 70);
-  --default-colour-7: rgb(28, 28, 28);
-  --default-colour-8: rgb(37, 37, 37);
-  --default-colour-9: rgb(150, 150, 150);
-  --default-colour-10: rgb(216, 51, 51);
+  --default-gradient: -webkit-linear-gradient(
+    left,
+    rgb(72, 50, 219),
+    rgb(215, 70, 145)
+  );
+  --default-colour-1: rgb(215, 70, 145);
+  --default-colour-2: rgb(115, 30, 251);
+  --default-colour-3: rgb(158, 59, 224);
+
+  --default-colour-10: rgb(15, 15, 15);
+  --default-colour-11: rgb(28, 28, 28);
+  --default-colour-12: rgb(37, 37, 37);
+  --default-colour-13: rgb(65, 65, 70);
+  --default-colour-14: rgb(150, 150, 150);
+  --default-colour-15: rgb(245, 245, 245);
+
+  --default-colour-20: rgb(216, 51, 51);
   --font-family: "Poppins", sans-serif;
 }
 
@@ -25,6 +32,6 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--default-colour-6);
+  background: var(--default-colour-13);
   border-radius: 5px;
 }

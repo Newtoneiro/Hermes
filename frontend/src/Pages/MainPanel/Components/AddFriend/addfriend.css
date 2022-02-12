@@ -24,7 +24,7 @@
   border-radius: 5px 0 0 5px;
   letter-spacing: 1px;
 
-  background-color: var(--default-colour-3);
+  background-color: var(--default-colour-15);
 }
 
 .addfriend_input-box-button {
@@ -40,12 +40,14 @@
   padding: 0.5em;
   font-size: 20px;
   width: 60px;
-  color: var(--default-colour-3);
+  color: var(--default-colour-15);
   transition: 0.5s;
+
+  cursor: pointer;
 }
 
 .addfriend_input-box-button:hover {
-  background-color: var(--default-colour-5);
+  background-color: var(--default-colour-3);
   transform: scale(1.1);
   transition: 0.5s;
 }
@@ -67,7 +69,7 @@
   justify-content: space-between;
 
   font-family: var(--font-family);
-  background-color: var(--default-colour-3);
+  background-color: var(--default-colour-15);
   width: 80%;
   height: 3em;
   border-radius: 5px;
@@ -79,7 +81,7 @@
 }
 
 .addfriend_userlist-user:hover {
-  background-color: var(--default-colour-9);
+  background-color: var(--default-colour-14);
   transition: 0.5s;
 }
 
@@ -89,7 +91,7 @@
 }
 
 .addfriend_userlist-user-add:hover {
-  color: var(--default-colour-1);
+  color: var(--default-gradient);
   transition: 0.5s;
 }
 
@@ -103,7 +105,7 @@
 
   font-family: var(--font-family);
   font-size: 10px;
-  color: var(--default-colour-3);
+  color: var(--default-colour-15);
   font-weight: 800;
   letter-spacing: 2px;
 }

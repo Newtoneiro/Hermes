@@ -7,6 +7,11 @@ const app = express();
 const jwtDecode = require('jwt-decode');
 const jwt = require('express-jwt');
 const cookieParser = require('cookie-parser');
+const io = require("socket.io")(3001, {
+  cors: {
+    origin: ["http://localhost:3000"]
+  }
+});
 
 const csrf = require('csurf');
 const csrfProtection = csrf({
@@ -208,4 +213,17 @@ app.get('/api/users/getFriends', checkJwt, async (req, res) => {
     console.log(err)
     res.send({status: -1})
   }
+})
+
+// Socket stuff
+
+io.on("connection", socket => {
+  socket.on('send-message', (message, room) => {
+    socket.to(room).emit("receive-message", message)
+  })
+
+  socket.on("join-room", room => {
+    socket.join(room)
+    console.log(room)
+  })
 })

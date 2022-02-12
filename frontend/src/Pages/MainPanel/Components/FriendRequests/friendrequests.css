@@ -13,7 +13,7 @@
 }
 
 .FriendRequests_main h2 {
-  color: var(--default-colour-3);
+  color: var(--default-colour-15);
 }
 
 .FriendRequest_main_instance {
@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: space-between;
 
-  background-color: var(--default-colour-3);
+  background-color: var(--default-colour-15);
   width: 80%;
   height: 3em;
   border-radius: 5px;

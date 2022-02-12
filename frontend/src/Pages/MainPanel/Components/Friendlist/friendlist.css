@@ -15,7 +15,7 @@
 }
 
 .Friendlist_main h2 {
-  color: var(--default-colour-3);
+  color: var(--default-colour-15);
 }
 
 .Friendlist_main-friend {
@@ -25,12 +25,19 @@
 
   font-family: var(--font-family);
   font-weight: 800;
-  background-color: var(--default-colour-3);
+  background-color: var(--default-colour-15);
   width: 80%;
   height: 3em;
   border-radius: 5px;
   margin: 0.3em 0;
   padding: 0 1em;
   letter-spacing: 2px;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.Friendlist_main-friend:hover {
+  background-color: var(--default-colour-14);
+  transform: scale(1.05);
   transition: 0.5s;
 }

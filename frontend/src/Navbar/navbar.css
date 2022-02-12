@@ -12,13 +12,13 @@
   justify-content: space-between;
   align-items: center;
 
-  background-color: var(--default-colour-2);
-  -webkit-box-shadow: 0px 2px 12px 0px var(--default-colour-2);
-  -moz-box-shadow: 0px 2px 12px 0px var(--default-colour-2);
-  box-shadow: 0px 2px 12px 0px var(--default-colour-2);
+  background-color: var(--default-colour-10);
+  -webkit-box-shadow: 0px 2px 12px 0px var(--default-colour-10);
+  -moz-box-shadow: 0px 2px 12px 0px var(--default-colour-10);
+  box-shadow: 0px 2px 12px 0px var(--default-colour-10);
 
   font-family: var(--font-family), sans-serif;
-  color: var(--default-colour-3);
+  color: var(--default-colour-15);
   letter-spacing: 2px;
   z-index: 20;
 }
@@ -54,7 +54,7 @@
 .navbar_login_popup a {
   text-decoration: none;
   font-weight: 800;
-  color: var(--default-colour-3);
+  color: var(--default-colour-15);
 }
 
 .navbar_login-link {
@@ -66,34 +66,35 @@
   font-family: var(--font-family);
   font-weight: 800;
   font-size: 16px;
-  color: var(--default-colour-3);
+  color: var(--default-colour-15);
   letter-spacing: 2px;
 }
 
 .navbar_login-link_button {
   border: none;
   outline: none;
-  background-color: var(--default-colour-5);
+  background: var(--default-gradient);
   border-radius: 20px;
   padding: 0.1em 1em;
   transition: 0.5s;
+  cursor: pointer;
 }
 
 .navbar_login-link_button:hover {
-  background-color: var(--default-colour-4);
+  transform: scale(1.1);
   transition: 0.5s;
 }
 
 .navbar_toggle_menu {
   display: none;
-  color: var(--default-colour-3);
+  color: var(--default-colour-15);
   cursor: pointer;
   font-size: 20px;
   transition: 0.5s;
 }
 
 .navbar_toggle_menu:hover {
-  color: var(--default-colour-3);
+  color: var(--default-colour-15);
   font-size: 20px;
   transform: rotatez(90deg);
   transition: 0.5s;
@@ -106,7 +107,7 @@
   justify-content: center;
 
   text-align: center;
-  background-color: var(--default-colour-7);
+  background-color: var(--default-colour-11);
   padding: 0.5rem 2rem;
   position: absolute;
   top: 48px;
