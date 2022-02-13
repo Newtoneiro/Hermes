@@ -7,15 +7,15 @@ import './mainpanel.css'
 
 const MainPanel = () => {
 
-  return <>
-    <Navbar/>
-    <CommunicationProvider>
-    <div className='mainpanel_main'>
-      <Sidepanel/>
-      <CommunicationWindowMain/>
+  return <CommunicationProvider>
+    <div className='mainpanel_container'>
+      <Navbar/>
+      <div className='mainpanel_main'>
+        <Sidepanel/>
+        <CommunicationWindowMain/>
+      </div>
     </div>
     </CommunicationProvider>
-  </>;
 };
 
 export default MainPanel;

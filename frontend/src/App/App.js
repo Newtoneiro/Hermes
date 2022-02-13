@@ -10,7 +10,7 @@ import Home from '../Pages/Home/Home';
 import MainPanel from '../Pages/MainPanel/MainPanel';
 
 const App = () => {
-  let { path, url } = useRouteMatch();
+  let { path } = useRouteMatch();
   const AuthCon = useContext(AuthContext)
   return <>
     <div className='App_main'>

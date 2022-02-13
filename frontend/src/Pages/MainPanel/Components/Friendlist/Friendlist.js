@@ -10,18 +10,21 @@ const Friendlist = () => {
     const AuthFetchCon = useContext(FetchContext)
     const comCon = useContext(communicaitonContext)
 
-    const loadData = async () => {
-        const {data} = await AuthFetchCon.authFetch.get('users/getFriends')
-        if (data.status === 0){
-            setFriends(data.result)
+    useEffect(() => {
+        console.log('fetch friends')
+        async function execute(){
+            setLoading(true)
+            
+            const {data} = await AuthFetchCon.authFetch.get('users/getFriends')
+            if (data.status === 0){
+                setFriends(data.result)
+            }
+            
+            setLoading(false)
         }
-    }
 
-    useEffect(async () => {
-        setLoading(true)
-        await loadData()
-        setLoading(false)
-    }, [])
+        execute()
+    }, [AuthFetchCon.authFetch])
 
     const handleClick = (room) => {
         comCon.joinRoom(room)
@@ -29,10 +32,10 @@ const Friendlist = () => {
 
     return <div className='Friendlist_main'>
         {loading ? <Loading/>:
-        friends.length == 0?
+        friends.length === 0?
         <h2>No friends yet!</h2>:
         friends.map((friend) => {
-            return <div key={friend.friendships_id} className='Friendlist_main-friend'
+            return <div key={friend.friendships_id} className={`Friendlist_main-friend ${friend.friendships_id === comCon.room && 'friend-selected'}`}
                     onClick={() => handleClick(friend.friendships_id)}>
                 <h3>{friend.username}</h3>
             </div>

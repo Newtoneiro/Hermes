@@ -18,7 +18,10 @@ const CommunicationWindowMain = () => {
       sender: AuthCon.authState.userInfo.id,
     }
     comCon.sendMessage(message)
-    dummy.current.scrollIntoView({behaviour: 'smooth'});
+    setText('')
+    setTimeout(() => {
+      dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})
+    }, 20)
   }
 
   return (<div className='communication-main'>
@@ -31,7 +34,7 @@ const CommunicationWindowMain = () => {
                   </div>
                 </div>
             })}
-            <div ref={dummy}></div>
+          <div ref={dummy}></div>
           </div>
         <textarea className='communication-main-textarea' value={text} onChange={(e) => setText(e.target.value)}></textarea>
         <button type='submit' className='communication-main-button' onClick={(e) => handleSubmit(e)}>Send</button></>}

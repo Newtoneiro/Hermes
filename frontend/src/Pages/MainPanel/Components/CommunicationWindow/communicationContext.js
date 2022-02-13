@@ -1,6 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
 import { io } from "socket.io-client";
-import { AuthContext } from "../../../../AuthContext/Authcontext";
 
 const communicaitonContext = createContext()
 
