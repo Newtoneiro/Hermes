@@ -32,11 +32,12 @@ app.use(
   )
   app.use(cookieParser());
   
-  //
+//
   const mongoose = require('mongoose');
   const User = require('./Models/user')
   const Friendship = require('./Models/friendship')
   const FriendshipRequest = require('./Models/friendship_request')
+  const Message = require('./Models/message')
   
   mongoose.connect(`mongodb+srv://Hermes:${process.env.MONGODB_PASSWORD}@hermes.bnfuz.mongodb.net/Hermes?retryWrites=true&w=majority`, {useNewUrlParser: true}, () => {
     console.log('Connected to mongoDB')
@@ -280,14 +281,14 @@ app.get('/api/users/getFriends', checkJwt, async (req, res) => {
     })
     friends1 = await Promise.all(friends1.map(async (friend) => {
       var user = await User.findOne({user_id: friend.user2_id})
-      return {friendship_id: friend.friendship_id, friend_id: friend.user2_id, username: user.username}
+      return {friendships_id: friend.friendships_id, friend_id: friend.user2_id, username: user.username}
     }))
     var friends2 = await Friendship.find({
       user2_id: user_id,
     })
     friends2 = await Promise.all(friends2.map(async (friend) => {
       var user = await User.findOne({user_id: friend.user1_id})
-      return {friendship_id: friend.friendship_id, friend_id: friend.user2_id, username: user.username}
+      return {friendships_id: friend.friendships_id, friend_id: friend.user2_id, username: user.username}
     }))
     
     res.send({result: friends1.concat(friends2), status: 0});
@@ -298,14 +299,35 @@ app.get('/api/users/getFriends', checkJwt, async (req, res) => {
   }
 })
 
+app.post('/api/messages/get', async (req, res) => {
+  const {room} = req.body
+  const result = await Message.find({room_id: room})
+  result.sort((a, b) => (a.timestamp > b.timestamp) ? 1: -1)
+  res.send({result: result, status: 0})
+})
+
 // Socket stuff
 
 io.on("connection", socket => {
   socket.on('send-message', (message, room) => {
-    socket.to(room).emit("receive-message", message)
+    let id = uuid.v4();
+    const new_message = new Message({
+      message_id: id,
+      room_id: room,
+      sender_id: message.sender_id,
+      text: message.text,
+      timestamp: performance.now()
+    })
+    new_message.save().then(() => {
+      io.in(room).emit("receive-message", new_message)
+    })
   })
 
   socket.on("join-room", room => {
     socket.join(room)
+  })
+
+  socket.on("leave-room", room => {
+    socket.leave(room)
   })
 })

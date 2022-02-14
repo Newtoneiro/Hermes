@@ -4,6 +4,8 @@ import { AuthContext } from '../AuthContext/Authcontext';
 import { AiOutlineMenu } from 'react-icons/ai'
 import './navbar.css'
 
+import logo from '../resources/logo.png'
+
 const Navbar = () => {
     const links = ['about', 'contact', 'info']
     const [toggleMenu, setToggleMenu] = useState(false)
@@ -23,11 +25,12 @@ const Navbar = () => {
 
     return <div className='navbar_main'>
                 <div className='navbar_header'>
+                    <img src={logo} alt='logo'></img>
                     <h1>Hermes</h1>
                 </div>
                 <div className='navbar_links'>
                     {links.map((link) => {
-                        return <h3>{link}</h3>
+                        return <h3 key={Math.random()}>{link}</h3>
                     })}
                 </div>
                 {<Loginbox classname='navbar_login'/>}

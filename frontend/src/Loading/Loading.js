@@ -3,7 +3,7 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import './loading.css'
 
 const Loading = () => {
-  return <div><AiOutlineLoading3Quarters className='rotating'/></div>;
+  return <AiOutlineLoading3Quarters className='rotating'/>;
 };
 
 export default Loading;

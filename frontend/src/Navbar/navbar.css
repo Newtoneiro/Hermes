@@ -23,7 +23,14 @@
 }
 
 .navbar_header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 25px;
+}
+
+.navbar_header img {
+  width: 70px;
 }
 
 .navbar_links {

@@ -6,7 +6,7 @@ const { Provider } = FetchContext;
 
 const FetchProvider = ({ children }) => {
     const authFetch = axios.create({
-        baseURL: "/api",
+      baseURL: "/api",
     });
 
     useEffect(() => {
@@ -16,7 +16,7 @@ const FetchProvider = ({ children }) => {
       }
 
       getCsrfToken();
-    }, [])
+    }, [authFetch])
 
   authFetch.interceptors.response.use(
     response => {

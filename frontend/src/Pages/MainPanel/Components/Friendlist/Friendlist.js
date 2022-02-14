@@ -11,7 +11,6 @@ const Friendlist = () => {
     const comCon = useContext(communicaitonContext)
 
     useEffect(() => {
-        console.log('fetch friends')
         async function execute(){
             setLoading(true)
             
@@ -19,7 +18,6 @@ const Friendlist = () => {
             if (data.status === 0){
                 setFriends(data.result)
             }
-            
             setLoading(false)
         }
 
