@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors")
 const bcrypt = require("bcrypt")
 const uuid = require("uuid")
-const db = require('./database');
+// const db = require('./database');
 const app = express();
 const jwtDecode = require('jwt-decode');
 const jwt = require('express-jwt');
@@ -39,7 +39,7 @@ app.use(
   const FriendshipRequest = require('./Models/friendship_request')
   const Message = require('./Models/message')
   
-  mongoose.connect(`mongodb+srv://Hermes:${process.env.MONGODB_PASSWORD}@hermes.bnfuz.mongodb.net/Hermes?retryWrites=true&w=majority`, {useNewUrlParser: true}, () => {
+  mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@hermes.bnfuz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, {useNewUrlParser: true}, () => {
     console.log('Connected to mongoDB')
   })
 //
@@ -70,6 +70,7 @@ const attachUser = (req, res, next) => {
 
 const checkJwt = jwt({
   secret: process.env.JWT_SECRET,
+  ignoreExpiration: true,
   algorithms: ['HS256'],
   getToken: req => req.cookies.token
 })
