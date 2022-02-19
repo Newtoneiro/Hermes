@@ -17,7 +17,7 @@ const AuthProvider = ({children}) => {
     }, [])
     
     
-    const setAuthInfo = ({userInfo, expiresAt}) => {
+    const setAuthInfo = ({userInfo, expiresAt, token}) => {
         localStorage.setItem('userInfo', JSON.stringify(userInfo))
         localStorage.setItem('expiresAt', expiresAt)
         setAuthState({

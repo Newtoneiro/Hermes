@@ -1,5 +1,5 @@
-import {createContext, useReducer, useState} from "react";
-import { publicFetch } from "../Fetch/fetch";
+import {createContext, useReducer, useState, useContext} from "react";
+import { FetchContext } from "../Fetch/AuthFetchContext";
 
 const RegisterContext = createContext()
 
@@ -14,6 +14,7 @@ const RegisterProvider = ({children})=>{
     const [redirectOnRegister, setRedirectOnRegister] = useState(false)
 
     const [loading, setLoading] = useState(false)
+    const authFetchCon = useContext(FetchContext)
 
     const validateEmail = (email) => {
         return String(email)
@@ -103,7 +104,7 @@ const RegisterProvider = ({children})=>{
         setLoading(true)
         e.preventDefault()
         if (checkCrudentials()){
-            const { data } = await publicFetch.post('users/register', crudentials);
+            const { data } = await authFetchCon.authFetch.post('users/register', crudentials);
             if (data.result >= 0) {
                 setLoading(false)
                 return data

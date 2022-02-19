@@ -1,5 +1,5 @@
-import {createContext, useReducer, useState } from "react";
-import { publicFetch } from "../Fetch/fetch";
+import {createContext, useContext, useReducer, useState } from "react";
+import {FetchContext} from '../Fetch/AuthFetchContext'
 
 const LoginContext = createContext()
 
@@ -11,6 +11,8 @@ const LoginProvider = ({children})=>{
     const [inputs, setInputs] = useState([0, 0]);
     const [loading, setLoading] = useState(false)
     const [redirectOnLogin, setRedirectOnLogin] = useState(false)
+
+    const authFetchCon = useContext(FetchContext)
 
     function reducer(state, action){
         switch (action.type) {
@@ -53,7 +55,7 @@ const LoginProvider = ({children})=>{
         e.preventDefault();
         setLoading(true)
         if (checkCrudentials()){
-            const { data } = await publicFetch.post('users/verify', crudentials);
+            const { data } = await authFetchCon.authFetch.post('users/verify', crudentials);
             if (data.result >= 0){
                 setLoading(false)
                 return data;

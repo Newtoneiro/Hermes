@@ -4,7 +4,6 @@ import { RegisterContext } from './registercontext';
 import { Redirect } from 'react-router-dom';
 import Loading from '../Loading/Loading';
 
-
 const Register = () => {
   const RegisterCon = useContext(RegisterContext)
 

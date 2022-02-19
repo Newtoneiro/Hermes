@@ -1,38 +1,55 @@
+require('dotenv').config()
+
+const PORT = process.env.PORT || 8080
+
 const express = require("express");
 const cors = require("cors")
 const bcrypt = require("bcrypt")
 const uuid = require("uuid")
-// const db = require('./database');
 const app = express();
 const jwtDecode = require('jwt-decode');
-const jwt = require('express-jwt');
 const cookieParser = require('cookie-parser');
-const io = require("socket.io")(3001, {
-  cors: {
-    origin: ["http://localhost:3000"]
-  }
-});
-
-const csrf = require('csurf');
-const csrfProtection = csrf({
-  cookie: true
-});
-
-require('dotenv').config()
-
-const {
-  createToken,
-} = require('./utils');
+app.use(cookieParser());
 
 app.use(express.json())
 app.use(
   cors({
-    origin: "*",
+    credentials: true,
+    origin: ["http://localhost:3000", "https://sad-goldwasser-10179d.netlify.app"],
   })
-  )
-  app.use(cookieParser());
+)
+
+const csrf = require('csurf');
+const csrfProtection = csrf({
+  cookie: {
+            key: '_csrf',
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+          }
+});
+app.use(csrfProtection);
+
+var server = require('http').createServer(app)
+
+const io = require('socket.io')(server, {
+  cors: {
+    origin: "*"
+  }
+})
+
+server.listen(PORT, () => {
+    console.log('Server listenig on port' + PORT);
+})
+
+const {
+  createToken,
+  requireAdmin,
+  attachUser,
+  checkJwt
+} = require('./utils');
   
-//
+// DATABASE STUFF
   const mongoose = require('mongoose');
   const User = require('./Models/user')
   const Friendship = require('./Models/friendship')
@@ -44,44 +61,14 @@ app.use(
   })
 //
 
-const requireAdmin = (req, res, next) => {
-  const {role} = req.user;
-  if (role !== 'admin'){
-    return res.status(401).json({message: 'insufficient role'})
-  }
-  next();
-}
-
-const attachUser = (req, res, next) => {
-  const token = req.cookies.token;
-  if (!token){
-    return res.status(401).json({message: 'Authentication required'})
-  }
-  const decodedToken = jwtDecode(token);
-
-  if(!decodedToken){
-    return res.status(401).json({message: 'There was a problem with authorization'})
-  }
-  else{
-    req.user = decodedToken;
-    next();
-  }
-}
-
-const checkJwt = jwt({
-  secret: process.env.JWT_SECRET,
-  ignoreExpiration: true,
-  algorithms: ['HS256'],
-  getToken: req => req.cookies.token
-})
-
-app.listen(8080, () => {
-    console.log(`App running on 8080`);
+app.get('/api/csrf-token', (req, res) => {
+  res.json({csrfToken: req.csrfToken()});
 })
 
 app.get('/', (req, res)=> {
-    res.sendStatus(200);
+  res.sendStatus(200);
 })
+
 
 app.post('/api/users/register', async (req, res) => {
   const {username, email, password, confirm_password} = req.body;
@@ -122,7 +109,9 @@ app.post('/api/users/verify', async (req, res) => {
       const expiresAt = decodedToken.exp;
 
       res.cookie('token', token, {
-        httpOnly: true
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
       })
 
       res.json({
@@ -143,11 +132,6 @@ app.post('/api/users/verify', async (req, res) => {
 
 // Authorized requests from now on
 app.use(attachUser);
-app.use(csrfProtection);
-
-app.get('/api/csrf-token', (req, res) => {
-  res.json({csrfToken: req.csrfToken()});
-})
 
 app.post('/api/users/find', checkJwt, async (req, res) => {
   const user_id = req.user.id;
@@ -317,7 +301,7 @@ io.on("connection", socket => {
       room_id: room,
       sender_id: message.sender_id,
       text: message.text,
-      timestamp: performance.now()
+      timestamp: Date.now().toString()
     })
     new_message.save().then(() => {
       io.in(room).emit("receive-message", new_message)

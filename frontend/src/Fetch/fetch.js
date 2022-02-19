@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const publicFetch = axios.create({
-    baseURL: "/api"
+    baseURL: "/api",
+    withCredentials: true,
 });
 
 export { publicFetch };

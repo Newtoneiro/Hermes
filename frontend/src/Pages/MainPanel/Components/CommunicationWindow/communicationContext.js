@@ -15,7 +15,7 @@ const CommunicationProvider = ({children}) => {
 
     useEffect(() => {
         async function createSocket(){
-            const new_socket = io("http://localhost:3001")
+            const new_socket = io("/")
             new_socket.on('receive-message', message => {
                     setMessages((old) => {
                         return [...old, message]

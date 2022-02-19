@@ -6,6 +6,7 @@ const { Provider } = FetchContext;
 
 const FetchProvider = ({ children }) => {
     const authFetch = axios.create({
+      withCredentials: true,
       baseURL: "/api",
     });
 
