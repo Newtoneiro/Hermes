@@ -34,7 +34,7 @@
   justify-content: center;
 }
 
-.communication-main-textarea {
+.communication-main-input {
   height: 30px;
   width: 80%;
 
@@ -48,7 +48,12 @@
   border: none;
   resize: none;
 
-  justify-content: center;
+  white-space: normal;
+  text-align: left;
+  -moz-text-align-last: center; /* Firefox 12+ */
+  text-align-last: left;
+
+  text-align: left;
 }
 
 .communication-main-button {
@@ -136,5 +141,10 @@
 @media screen and (max-width: 900px) {
   .message {
     max-width: 120px;
+    font-size: 10px;
+  }
+
+  .communication-main-input {
+    font-size: 12px;
   }
 }

@@ -4,7 +4,7 @@
 
   box-sizing: border-box;
 
-  padding: 0 2em;
+  padding: 0 1.5em;
 
   display: flex;
   justify-content: space-between;
@@ -94,8 +94,11 @@
 
 .navbar_toggle_menu {
   display: none;
+  height: 20px;
+
   color: var(--default-colour-15);
   cursor: pointer;
+
   font-size: 20px;
   transition: 0.5s;
 }
@@ -103,7 +106,7 @@
 .navbar_toggle_menu:hover {
   color: var(--default-colour-15);
   font-size: 20px;
-  transform: rotatez(90deg);
+  transform: rotate(90deg);
   transition: 0.5s;
 }
 
@@ -133,7 +136,9 @@
 
 @media screen and (max-width: 900px) {
   .navbar_toggle_menu {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .navbar_links {

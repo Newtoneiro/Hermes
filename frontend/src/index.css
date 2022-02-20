@@ -26,6 +26,13 @@ body {
   background-size: cover;
 }
 
+@media screen and (max-width: 900px) {
+  body {
+    background: url("./resources/02_vertical.png");
+    background-size: cover;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 0;
   background: transparent;
