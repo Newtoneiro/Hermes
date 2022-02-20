@@ -1,6 +1,5 @@
 .communication-main {
   height: 100%;
-  width: 60%;
 
   display: flex;
   flex-direction: column;
@@ -11,12 +10,8 @@
 
   font-family: var(--font-family);
   letter-spacing: 2px;
-}
 
-@media screen and (max-width: 900px) {
-  .communication-main {
-    display: none;
-  }
+  flex-grow: 1;
 }
 
 .communicaiton-main_messages {
@@ -26,6 +21,8 @@
   background: var(--default-colour-13);
 
   overflow-y: scroll;
+
+  flex-grow: 1;
 }
 
 .communication-main_send {
@@ -38,7 +35,7 @@
 }
 
 .communication-main-textarea {
-  height: 30%;
+  height: 30px;
   width: 80%;
 
   background-color: var(--default-colour-15);
@@ -50,12 +47,12 @@
   outline: none;
   border: none;
   resize: none;
+
+  justify-content: center;
 }
 
 .communication-main-button {
-  width: 10%;
-  height: 35%;
-
+  height: 35px;
   font-family: var(--font-family);
   letter-spacing: 2px;
   font-weight: 800;
@@ -74,7 +71,6 @@
 
 .communication-main-button:hover {
   background-color: var(--default-colour-2);
-  transform: scale(1.1);
   transition: 0.5s;
 }
 
@@ -92,9 +88,12 @@
 }
 
 .message {
+  width: auto;
   min-width: 100px;
   max-width: 300px;
   min-height: 35px;
+
+  padding: 0.3em;
 
   border-radius: 0 5px 5px 0;
 
@@ -103,8 +102,9 @@
 
   display: block;
   word-wrap: break-word;
-  text-align: justify;
-  text-justify: inter-word;
+
+  text-align: start;
+  text-justify: inter-character;
 }
 
 .message h2,
@@ -131,4 +131,10 @@
 
 .communication-main_loading .rotating {
   font-size: 50px;
+}
+
+@media screen and (max-width: 900px) {
+  .message {
+    max-width: 120px;
+  }
 }

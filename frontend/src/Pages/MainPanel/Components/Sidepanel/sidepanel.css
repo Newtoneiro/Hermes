@@ -12,26 +12,21 @@
 }
 
 .Sidepanel_main {
-  width: 40%;
   height: 100%;
-  min-width: 300px;
+  min-width: 100px;
   min-height: 200px;
 
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 
   border-right: solid 1px black;
 }
 
-@media screen and (max-width: 900px) {
-  .Sidepanel_main {
-    width: 100%;
-  }
-}
-
 .Sidepanel_navbar {
   height: 100%;
+  width: 15%;
+  max-width: 200px;
 
   display: flex;
   flex-direction: column;
@@ -40,8 +35,6 @@
 
   background: var(--default-colour-11);
   z-index: 20;
-
-  border-right: solid black 1px;
 
   flex-grow: 1;
 }
@@ -87,8 +80,27 @@
 }
 
 .default-block {
-  width: 70%;
+  width: 100%;
+  max-width: 400px;
   height: 100%;
 
+  border-right: solid black 1px;
+
   background: var(--default-colour-12);
+}
+
+@media screen and (max-width: 900px) {
+  .Sidepanel_main {
+    width: 100px;
+  }
+
+  .default-block {
+    margin-left: 100px;
+    margin-top: 60px;
+    position: fixed;
+
+    z-index: 30;
+
+    animation: slide-left 0.4s;
+  }
 }

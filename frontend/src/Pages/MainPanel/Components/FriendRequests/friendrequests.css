@@ -16,6 +16,7 @@
 
 .FriendRequests_main h2 {
   color: var(--default-colour-15);
+  text-align: center;
   margin: 0.5em 0;
 }
 

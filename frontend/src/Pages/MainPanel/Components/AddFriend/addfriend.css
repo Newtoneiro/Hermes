@@ -62,6 +62,7 @@
   font-family: var(--font-family);
   font-weight: 800;
 
+  animation: slide-left 0.7s;
   overflow-y: scroll;
 }
 
