@@ -7,40 +7,66 @@
   align-items: center;
   justify-content: flex-start;
 
-  margin: 0.5em 0.4em 0.4em 0;
-
   font-family: var(--font-family);
   font-weight: 800;
 
   animation: slide-left 0.7s;
-
   overflow-y: scroll;
 }
 
 .FriendRequests_main h2 {
   color: var(--default-colour-15);
+  margin: 0.5em 0;
+}
+
+.FriendRequests_main-footer {
+  background-color: var(--default-colour-1);
+  height: 0.02em;
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.FriendRequest_main-loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: var(--default-colour-14);
+}
+
+.FriendRequest_main-loading .rotating {
+  font-size: 40px;
 }
 
 .FriendRequest_main_instance {
-  width: 80%;
+  width: 100%;
   height: 3em;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  margin: 0.3em 0;
-  padding: 0 1em;
+  background-color: var(--default-colour-11);
 
-  background-color: var(--default-colour-15);
-
-  border-radius: 5px;
+  color: var(--default-colour-15);
+  font-family: var(--font-family);
+  font-weight: 800;
   letter-spacing: 2px;
+
+  border-bottom: solid 1px var(--default-colour-13);
+
   transition: 0.5s;
+}
+
+.FriendRequest_main_instance h2 {
+  margin-left: 0.5em;
 }
 
 .FriendRequest_main_instance-buttons {
   width: 20%;
+  margin-right: 0.5em;
 
   display: flex;
   align-items: center;
@@ -56,13 +82,13 @@
 .decline:hover {
   color: brown;
 
-  transform: scale(1.1);
+  transform: scale(1.5);
   transition: 0.5s;
 }
 
 .accept:hover {
   color: rgb(16, 107, 4);
 
-  transform: scale(1.1);
+  transform: scale(1.5);
   transition: 0.5s;
 }

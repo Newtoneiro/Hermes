@@ -34,8 +34,8 @@ const Sidepanel = () => {
           >
             <BsFillEnvelopeFill />
           </div>
+          <div className="Sidepanel_navbar-footer" />
         </div>
-        <div className="Sidepanel_navbar-footer" />
         <div className="default-block">
           {state === 0 && <Friendlist />}
           {state === 1 && <AddFriend />}

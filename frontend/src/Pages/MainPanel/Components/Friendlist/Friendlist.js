@@ -29,7 +29,7 @@ const Friendlist = () => {
     }
 
     return <div className='Friendlist_main'>
-        {loading ? <Loading/>:
+        {loading ? <div className='Friendlist_main-loading'><Loading/></div>:
         friends.length === 0?
         <h2>No friends yet!</h2>:
         friends.map((friend) => {

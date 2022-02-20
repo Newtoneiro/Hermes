@@ -43,7 +43,7 @@ const AddFriend = () => {
       <div className='addfriend_userlist'>
         {found.map((user) => {
             return <div className='addfriend_userlist-user' key={user.user_id}>
-                <FaUserAlt/>
+                <FaUserAlt className='addfriend_userlist-user-profile'/>
                 <h2>{user.username}</h2>
                 <AiOutlinePlus onClick={() => handleClick(user.user_id)} className='addfriend_userlist-user-add'/>
             </div>

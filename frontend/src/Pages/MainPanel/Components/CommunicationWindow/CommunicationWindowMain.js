@@ -38,8 +38,12 @@ const CommunicationWindowMain = () => {
             })}
           <div ref={comCon.dummy}></div>
           </div>
-        <textarea className='communication-main-textarea' value={text} onChange={(e) => setText(e.target.value)}></textarea>
-        <button type='submit' className='communication-main-button' onClick={(e) => handleSubmit(e)}>Send</button></>}
+        <div className='communication-main_send'>
+          <textarea className='communication-main-textarea' value={text} onChange={(e) => setText(e.target.value)}></textarea>
+          <button type='submit' className='communication-main-button' onClick={(e) => handleSubmit(e)}>Send</button>
+        </div>
+        </>
+        }
         </div>
   )
 }

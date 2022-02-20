@@ -47,19 +47,23 @@ const FriendRequests = () => {
     }
 
     return <div className='FriendRequests_main'>
-        {loading ?<Loading/>:
+        {loading ?<div className='FriendRequest_main-loading'><Loading/></div>:
         requests.length === 0?
         <h2>No pending requests</h2>
-        :requests.map((req) => {
+        :<>
+        <h2>New requests:</h2>
+        <div className='FriendRequests_main-footer'></div>
+        {requests.map((req) => {
             return <div key={req.friendships_requests_id} className='FriendRequest_main_instance'>
-                    {req.username}
+                    <h2>{req.username}</h2>
                     <div className='FriendRequest_main_instance-buttons'>
                         <FaTimes className='decline' onClick={() => handleDecline(req.friendships_requests_id)}/>
                         <BsCheckLg className='accept' onClick={() => handleAccept(req.friendships_requests_id)}/>
                     </div>
                 </div>
         })}
-    </div>
+        </>}
+        </div>
 };
 
 export default FriendRequests;

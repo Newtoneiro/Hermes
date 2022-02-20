@@ -10,10 +10,22 @@
   font-family: var(--font-family);
   font-weight: 800;
 
-  margin: 0.5em 0.4em 0.4em 0;
-
   animation: slide-left 0.7s;
   overflow-y: scroll;
+}
+
+.Friendlist_main-loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: var(--default-colour-14);
+}
+
+.Friendlist_main-loading .rotating {
+  font-size: 40px;
 }
 
 .Friendlist_main h2 {
@@ -21,34 +33,32 @@
 }
 
 .Friendlist_main-friend {
-  width: 80%;
+  width: 100%;
   height: 3em;
 
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 
-  padding: 0 1em;
-  margin: 0.3em 0;
+  background-color: var(--default-colour-11);
 
-  background-color: var(--default-colour-15);
-  border-radius: 5px;
-
+  color: var(--default-colour-15);
   font-family: var(--font-family);
   font-weight: 800;
   letter-spacing: 2px;
+
+  border-bottom: solid 1px var(--default-colour-13);
 
   transition: 0.5s;
   cursor: pointer;
 }
 
 .Friendlist_main-friend:hover {
-  transform: scale(1.05);
+  letter-spacing: 3px;
   transition: 0.5s;
 }
 
 .friend-selected {
-  transform: scale(1.04);
   background-color: var(--default-colour-3);
   color: var(--default-colour-15);
 }

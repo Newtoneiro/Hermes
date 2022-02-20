@@ -12,42 +12,43 @@
 }
 
 .Sidepanel_main {
-  width: 30%;
+  width: 40%;
   height: 100%;
   min-width: 300px;
   min-height: 200px;
 
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  margin: 0 25px;
+  border-right: solid 1px black;
+}
+
+@media screen and (max-width: 900px) {
+  .Sidepanel_main {
+    width: 100%;
+  }
 }
 
 .Sidepanel_navbar {
-  width: 100%;
+  height: 100%;
 
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-start;
 
-  background: -webkit-linear-gradient(
-    left,
-    var(--default-colour-13),
-    var(--default-colour-11)
-  );
-  padding: 1em 0;
-  border-radius: 10px;
+  background: var(--default-colour-11);
   z-index: 20;
 
-  -webkit-box-shadow: -1px -1px 0px 0px rgba(143, 143, 150, 1);
-  -moz-box-shadow: -1px -1px 0px 0px rgba(143, 143, 150, 1);
-  box-shadow: -1px -1px 0px 0px rgba(143, 143, 150, 1);
+  border-right: solid black 1px;
+
+  flex-grow: 1;
 }
 
 .Sidepanel_navbar-button {
-  width: 25%;
+  width: 60px;
+  height: 60px;
 
   display: flex;
   align-items: center;
@@ -55,10 +56,12 @@
 
   outline: none;
   border: none;
-  border-radius: 10px;
 
+  background-color: var(--default-colour-13);
+  border-radius: 50%;
+
+  margin: 1em 0;
   font-size: 20px;
-  padding: 0.5em 0;
   color: var(--default-colour-15);
   transition: 0.5s;
 
@@ -67,35 +70,25 @@
 
 .selected {
   background: var(--default-gradient);
+  border-radius: 10px;
 }
 
 .Sidepanel_navbar-button:hover {
-  background: var(--default-colour-3);
+  border-radius: 10px;
   transform: scale(1.1);
   transition: 0.5s;
 }
 
 .Sidepanel_navbar-footer {
-  width: 90%;
+  width: 60%;
   height: 0.1em;
 
-  margin: 1em 0;
-  background-color: var(--default-colour-15);
+  background-color: var(--default-colour-3);
 }
 
 .default-block {
-  width: 100%;
-  height: 70vh;
+  width: 70%;
+  height: 100%;
 
-  background: -webkit-linear-gradient(
-    20deg,
-    var(--default-colour-13) 0%,
-    var(--default-colour-11) 80%
-  );
-
-  padding: 1em 0;
-  -webkit-box-shadow: -1px -1px 0px 0px rgba(143, 143, 150, 1);
-  -moz-box-shadow: -1px -1px 0px 0px rgba(143, 143, 150, 1);
-  box-shadow: -1px -1px 0px 0px rgba(143, 143, 150, 1);
-  border-radius: 10px;
+  background: var(--default-colour-12);
 }
