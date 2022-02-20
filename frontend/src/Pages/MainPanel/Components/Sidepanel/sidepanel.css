@@ -95,6 +95,7 @@
   }
 
   .default-block {
+    width: calc(100% - 100px);
     margin-left: 100px;
     margin-top: 60px;
     position: fixed;
