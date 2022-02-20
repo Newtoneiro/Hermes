@@ -46,7 +46,9 @@ const {
   createToken,
   requireAdmin,
   attachUser,
-  checkJwt
+  checkJwt,
+  encryptMessage,
+  decryptMessage
 } = require('./utils');
   
 // DATABASE STUFF
@@ -159,6 +161,7 @@ app.post('/api/users/find', checkJwt, async (req, res) => {
   // (select username from friendships join users on (user1_id = user_id) where user2_id = '${user_id}') and username not in
   // (select username from friendships join users on (user2_id = user_id) where user1_id = '${user_id}') ORDER BY username;`)
   const data = response.map(user => ({username: user.username, user_id: user.user_id}))
+  data.sort((a, b) => a.username.localeCompare(b.username))
   res.send(data)
 })
 
@@ -193,6 +196,7 @@ app.get('/api/users/getRequests', checkJwt, async (req, res) => {
       return {friendships_requests_id: request.friendships_requests_id, user1_id: request.user1_id, username: user.username}
     }))
     // var response = await db.promise().query(`SELECT friendships_requests_id, user1_id, username FROM friendships_requests join users on (user1_id = user_id) WHERE (user2_id = '${user_id}')`)
+    result.sort((a, b) => a.username.localeCompare(b.username))
     res.send({result: result, status: 0});
   }
   catch (err){
@@ -275,8 +279,9 @@ app.get('/api/users/getFriends', checkJwt, async (req, res) => {
       var user = await User.findOne({user_id: friend.user1_id})
       return {friendships_id: friend.friendships_id, friend_id: friend.user2_id, username: user.username}
     }))
-    
-    res.send({result: friends1.concat(friends2), status: 0});
+    var result = friends1.concat(friends2)
+    result.sort((a, b) => a.username.localeCompare(b.username))
+    res.send({result: result, status: 0});
   }
   catch (err){
     console.log(err)
@@ -288,6 +293,9 @@ app.post('/api/messages/get', async (req, res) => {
   const {room} = req.body
   const result = await Message.find({room_id: room})
   result.sort((a, b) => (a.timestamp > b.timestamp) ? 1: -1)
+  result.forEach((res) => {
+    res.text = decryptMessage(res.text)
+  })
   res.send({result: result, status: 0})
 })
 
@@ -296,14 +304,26 @@ app.post('/api/messages/get', async (req, res) => {
 io.on("connection", socket => {
   socket.on('send-message', (message, room) => {
     let id = uuid.v4();
-    const new_message = new Message({
+    
+    const encrypted_text = encryptMessage(message.text)
+    
+    const encrypted_message = new Message({
+      message_id: id,
+      room_id: room,
+      sender_id: message.sender_id,
+      text: encrypted_text,
+      timestamp: Date.now().toString()
+    })
+    
+    const new_message = {
       message_id: id,
       room_id: room,
       sender_id: message.sender_id,
       text: message.text,
       timestamp: Date.now().toString()
-    })
-    new_message.save().then(() => {
+    }
+    
+    encrypted_message.save().then(() => {
       io.in(room).emit("receive-message", new_message)
     })
   })

@@ -63,8 +63,8 @@ const CommunicationProvider = ({children}) => {
         }
     }
 
-    const sendMessage = (message) => {
-        socket.emit('send-message', message, room)
+    const sendMessage = async (message) => {
+        await socket.emit('send-message', message, room)
         setTimeout(() => {
             dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})
         }, 100);

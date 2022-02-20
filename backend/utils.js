@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const ejwt = require('express-jwt');
 const jwtDecode = require('jwt-decode');
+const encryptor = require('simple-encryptor')(process.env.CRYPT_KEY)
 
 const createToken = (user) => {
   if (!user.role) {
@@ -50,9 +51,21 @@ const checkJwt = ejwt({
   getToken: req => req.cookies.token
 });
 
+function encryptMessage(text){
+  var encrypted = encryptor.encrypt(text);
+  return encrypted
+}
+
+function decryptMessage(text){
+  var decrypted = encryptor.decrypt(text);
+  return decrypted
+}
+
 module.exports = {
     createToken,
     requireAdmin,
     attachUser,
-    checkJwt
+    checkJwt,
+    encryptMessage,
+    decryptMessage
 };

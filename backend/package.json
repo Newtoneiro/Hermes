@@ -13,6 +13,7 @@
     "jwt-decode": "^3.1.2",
     "mongoose": "^6.2.1",
     "mysql2": "^2.3.3",
+    "simple-encryptor": "^4.0.0",
     "socket.io": "^4.4.1",
     "uuid": "^8.3.2"
   }
