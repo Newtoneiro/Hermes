@@ -37,11 +37,11 @@ const CommunicationWindowMain = () => {
                 </div>
             })}
           <div ref={comCon.dummy}></div>
-          </div>
-        <div className='communication-main_send'>
-          <input type='text' className='communication-main-input' value={text} onChange={(e) => setText(e.target.value)}></input>
-          <button type='submit' className='communication-main-button' onClick={(e) => handleSubmit(e)}>Send</button>
         </div>
+        <form className='communication-main_send' onSubmit={(e) => handleSubmit(e)}>
+          <input type='text' className='communication-main-input' value={text} onChange={(e) => setText(e.target.value)} maxLength={200}></input>
+          <button type='submit' className='communication-main-button' onClick={(e) => handleSubmit(e)}>Send</button>
+        </form>
         </>
         }
         </div>

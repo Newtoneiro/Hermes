@@ -17,10 +17,14 @@ const FriendRequests = () => {
         }
     }
 
-    useEffect(async () => {
-        setLoading(true)
-        await loadData()
-        setLoading(false)
+    useEffect(() => {
+        async function execute(){
+            setLoading(true)
+            await loadData()
+            setLoading(false)
+        }
+        
+        execute()
     }, [])
 
     const handleDecline = async (req_id) => {

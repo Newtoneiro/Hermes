@@ -1,3 +1,13 @@
+@keyframes slide-top {
+  0% {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
 .navbar_main {
   width: 100%;
   height: 60px;
@@ -112,8 +122,8 @@
 
 .navbar_popup_menu {
   min-width: 150px;
-  position: absolute;
-  top: 48px;
+  position: fixed;
+  top: 60px;
   right: 0;
 
   display: none;
@@ -122,12 +132,13 @@
   justify-content: center;
 
   padding: 0.5rem 2rem;
-  margin-top: 1rem;
 
   text-align: center;
   background-color: var(--default-colour-11);
   border-radius: 0 0 5px 5px;
   box-shadow: 0 0 5 rgba(0, 0, 0, 0.2);
+
+  animation: slide-top 0.5s;
 }
 
 .navbar_popup_menu h3 {
