@@ -73,10 +73,19 @@
 }
 
 .Sidepanel_navbar-footer {
+  margin: 2em 0;
   width: 60%;
   height: 0.1em;
 
   background-color: var(--default-colour-3);
+}
+
+.Sidepanel_navbar-personal {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  flex-grow: 1;
 }
 
 .default-block {
@@ -110,5 +119,13 @@
   .Sidepanel_navbar-button {
     width: 40px;
     height: 40px;
+  }
+
+  .Sidepanel_navbar-footer {
+    margin: 0.2em 0;
+  }
+
+  .Sidepanel_navbar-button {
+    margin: 0.4em 0;
   }
 }

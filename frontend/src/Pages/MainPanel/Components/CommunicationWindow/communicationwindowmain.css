@@ -84,12 +84,14 @@
   margin: 0.2em;
 
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: flex-end;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
 }
 
 .sender {
   justify-content: flex-end;
+  flex-direction: row;
 }
 
 .message {
@@ -100,7 +102,7 @@
 
   padding: 0.3em;
 
-  border-radius: 0 5px 5px 0;
+  border-radius: 5px 5px 5px 1px;
 
   background-color: var(--default-colour-14);
 
@@ -121,8 +123,29 @@
 }
 
 .sender .message {
-  border-radius: 5px 0 0 5px;
+  border-radius: 5px 5px 1px 5px;
   background-color: var(--default-colour-1);
+}
+
+.message-picture {
+  margin: 0 0.2em;
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+.message-picture_dummy {
+  margin: 0 0.2em;
+  width: 30px;
+  height: 30px;
+
+  color: var(--default-colour-15);
+  border-radius: 50%;
+  border: solid 1px var(--default-colour-10);
 }
 
 .communication-main_loading {

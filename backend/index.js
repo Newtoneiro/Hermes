@@ -11,7 +11,8 @@ const jwtDecode = require('jwt-decode');
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-app.use(express.json())
+app.use(express.json({limit: '50mb'}))
+app.use(express.urlencoded({limit: '50mb', extended: true}))
 app.use(
   cors({
     credentials: true,
@@ -105,7 +106,7 @@ app.post('/api/users/verify', async (req, res) => {
   const response = await User.findOne({ username: username })
   if (response !== null){
     if (bcrypt.compareSync(password, response.password)){
-      const userInfo = {id: response.user_id, email: response.email, username: response.username, role: response.role}
+      const userInfo = {id: response.user_id, email: response.email, username: response.username, role: response.role, image: response.image}
       const token = createToken(userInfo);
       const decodedToken = jwtDecode(token);
       const expiresAt = decodedToken.exp;
@@ -270,14 +271,14 @@ app.get('/api/users/getFriends', checkJwt, async (req, res) => {
     })
     friends1 = await Promise.all(friends1.map(async (friend) => {
       var user = await User.findOne({user_id: friend.user2_id})
-      return {friendships_id: friend.friendships_id, friend_id: friend.user2_id, username: user.username}
+      return {friendships_id: friend.friendships_id, friend_id: friend.user2_id, username: user.username, image: user.image}
     }))
     var friends2 = await Friendship.find({
       user2_id: user_id,
     })
     friends2 = await Promise.all(friends2.map(async (friend) => {
       var user = await User.findOne({user_id: friend.user1_id})
-      return {friendships_id: friend.friendships_id, friend_id: friend.user2_id, username: user.username}
+      return {friendships_id: friend.friendships_id, friend_id: friend.user2_id, username: user.username, image: user.image}
     }))
     var result = friends1.concat(friends2)
     result.sort((a, b) => a.username.localeCompare(b.username))
@@ -287,6 +288,19 @@ app.get('/api/users/getFriends', checkJwt, async (req, res) => {
     console.log(err)
     res.send({status: -1})
   }
+})
+
+app.post('/api/users/uploadImage', async (req, res) => {
+  const {image} = req.body
+  const user_id = req.user.id;
+  try {
+    await User.findOneAndUpdate({user_id: user_id}, {image: image})
+  }
+  catch (err){
+    console.log(err)
+    res.send({status: -1})
+  }
+  res.send({status: 0})
 })
 
 app.post('/api/messages/get', async (req, res) => {

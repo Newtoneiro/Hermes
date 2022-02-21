@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import { BsPersonFill } from 'react-icons/bs'
 import { AuthContext } from '../../../../AuthContext/Authcontext'
 import Loading from '../../../../Loading/Loading'
 import { communicaitonContext } from './communicationContext'
@@ -34,8 +35,13 @@ const CommunicationWindowMain = () => {
                   <div className='message'>
                     <h2>{mess.text}</h2>
                   </div>
+                  {mess.sender_id === AuthCon.authState.userInfo.id ?
+                  (AuthCon.authState.userInfo.image !== '' ? <img className='message-picture' src={AuthCon.authState.userInfo.image} alt='pic'/> 
+                  : <BsPersonFill className='message-picture_dummy'></BsPersonFill>)
+                  :(comCon.friendImage !== '' ? <img className='message-picture' src={comCon.friendImage} alt='pic'/> 
+                  : <BsPersonFill className='message-picture_dummy'></BsPersonFill>)}
                 </div>
-            })}
+            })}  
           <div ref={comCon.dummy}></div>
         </div>
         <form className='communication-main_send' onSubmit={(e) => handleSubmit(e)}>

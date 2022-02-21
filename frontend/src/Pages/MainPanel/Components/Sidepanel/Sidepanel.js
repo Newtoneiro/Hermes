@@ -3,11 +3,13 @@ import {
   BsFillPersonPlusFill,
   BsFillPersonLinesFill,
   BsFillEnvelopeFill,
+  BsFillPersonFill,
 } from "react-icons/bs";
 import "./sidepanel.css";
 import AddFriend from "../AddFriend/AddFriend";
 import FriendRequests from "../FriendRequests/FriendRequests";
 import Friendlist from "../Friendlist/Friendlist";
+import Profile from "../Profile/Profile";
 
 const Sidepanel = () => {
   const [state, setState] = useState(0);
@@ -43,13 +45,25 @@ const Sidepanel = () => {
           >
             <BsFillEnvelopeFill />
           </div>
+          
           <div className="Sidepanel_navbar-footer" />
+          
+          <div className="Sidepanel_navbar-personal">
+            <div
+              className={`Sidepanel_navbar-button ${state === 4 && "selected"}`}
+              onClick={() => updateState(4)}
+            >
+              <BsFillPersonFill />
+          </div>
+
+          </div>
         </div>
       </div>
         {state !== 0 && <div className="default-block">
           {state === 1 && <Friendlist />}
           {state === 2 && <AddFriend />}
           {state === 3 && <FriendRequests />}
+          {state === 4 && <Profile/>}
       </div>}
     </>
   );

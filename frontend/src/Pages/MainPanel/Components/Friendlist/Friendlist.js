@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { BsPersonFill } from 'react-icons/bs';
 import { FetchContext } from '../../../../Fetch/AuthFetchContext';
 import Loading from '../../../../Loading/Loading';
 import { communicaitonContext } from '../CommunicationWindow/communicationContext';
@@ -24,8 +25,9 @@ const Friendlist = () => {
         execute()
     }, [AuthFetchCon.authFetch])
 
-    const handleClick = (room) => {
+    const handleClick = (room, img) => {
         comCon.joinRoom(room)
+        comCon.setFriendImage(img)
     }
 
     return <div className='Friendlist_main'>
@@ -34,8 +36,11 @@ const Friendlist = () => {
         <h2>No friends yet!</h2>:
         friends.map((friend) => {
             return <div key={friend.friendships_id} className={`Friendlist_main-friend ${friend.friendships_id === comCon.room && 'friend-selected'}`}
-                    onClick={() => handleClick(friend.friendships_id)}>
-                <h3>{friend.username}</h3>
+                    onClick={() => handleClick(friend.friendships_id, friend.image)}>
+                {friend.image !== '' ? <img className='Friendlist_main-friend_image' src={friend.image} alt='friend-pic'/> : <BsPersonFill className='Friendlist_main-friend_image'/>}
+                <div className='Friendlist_main-friend_username'>
+                    <h3>{friend.username}</h3>
+                </div>
             </div>
         })}
     </div>;

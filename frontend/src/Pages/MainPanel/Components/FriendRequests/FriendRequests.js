@@ -33,7 +33,7 @@ const FriendRequests = () => {
         {
             req_id: req_id,
         })
-        if (data.result == 0){
+        if (data.result === 0){
             await loadData()
         }
         setLoading(false)
@@ -44,7 +44,7 @@ const FriendRequests = () => {
         const {data} = await AuthFetchCon.authFetch.post('users/acceptRequest', {
             req_id: req_id
         })
-        if (data.result == 0){
+        if (data.result === 0){
             await loadData()
         }
         setLoading(false)

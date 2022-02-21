@@ -9,6 +9,7 @@ const CommunicationProvider = ({children}) => {
     const [socket, setSocket] = useState({id: 0})
     const [messages, setMessages] = useState([])
     const [loading, setLoading] = useState(false)
+    const [friendImage, setFriendImage] = useState('')
     const dummy = useRef()
 
     const authFetchCon = useContext(FetchContext)
@@ -78,7 +79,9 @@ const CommunicationProvider = ({children}) => {
         sendMessage,
         messages,
         loading,
-        dummy
+        dummy,
+        friendImage,
+        setFriendImage
     }}>
         {children}
     </communicaitonContext.Provider>

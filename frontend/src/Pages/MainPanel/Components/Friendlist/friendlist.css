@@ -38,7 +38,7 @@
 
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 
   background-color: var(--default-colour-11);
 
@@ -51,6 +51,27 @@
 
   transition: 0.5s;
   cursor: pointer;
+}
+
+.Friendlist_main-friend_image {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+.Friendlist_main-friend_username {
+  flex-grow: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Friendlist_main-friend_username h3 {
+  margin: 0;
 }
 
 .Friendlist_main-friend:hover {
