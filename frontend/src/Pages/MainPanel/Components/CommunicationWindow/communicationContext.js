@@ -21,6 +21,9 @@ const CommunicationProvider = ({children}) => {
                     setMessages((old) => {
                         return [...old, message]
                     })
+                    setTimeout(() => {
+                        dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})
+                    }, 300);
                 })
             setSocket(new_socket)
         }
@@ -40,7 +43,7 @@ const CommunicationProvider = ({children}) => {
                         if (dummy.current){
                             setTimeout(() => {
                             dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})
-                            }, 10);
+                            }, 300);
                         }
                     }
                     else{
