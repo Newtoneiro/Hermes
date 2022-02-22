@@ -81,14 +81,14 @@
 }
 
 .decline:hover {
-  color: brown;
+  color: var(--default-colour-20);
 
   transform: scale(1.5);
   transition: 0.5s;
 }
 
 .accept:hover {
-  color: rgb(16, 107, 4);
+  color: var(--default-colour-21);
 
   transform: scale(1.5);
   transition: 0.5s;

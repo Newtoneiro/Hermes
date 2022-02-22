@@ -58,6 +58,8 @@ const {
   const Friendship = require('./Models/friendship')
   const FriendshipRequest = require('./Models/friendship_request')
   const Message = require('./Models/message')
+  const GroupMembership = require('./Models/group_membership')
+  const GroupName = require('./Models/group_name')
   
   mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@hermes.bnfuz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, {useNewUrlParser: true}, () => {
     console.log('Connected to mongoDB')
@@ -278,7 +280,7 @@ app.get('/api/users/getFriends', checkJwt, async (req, res) => {
     })
     friends2 = await Promise.all(friends2.map(async (friend) => {
       var user = await User.findOne({user_id: friend.user1_id})
-      return {friendships_id: friend.friendships_id, friend_id: friend.user2_id, username: user.username, image: user.image}
+      return {friendships_id: friend.friendships_id, friend_id: friend.user1_id, username: user.username, image: user.image}
     }))
     var result = friends1.concat(friends2)
     result.sort((a, b) => a.username.localeCompare(b.username))
@@ -290,7 +292,51 @@ app.get('/api/users/getFriends', checkJwt, async (req, res) => {
   }
 })
 
-app.post('/api/users/uploadImage', async (req, res) => {
+app.post('/api/users/createGroup', checkJwt, async (req, res) => {
+  const user_id = req.user.id;
+  const {members, name} = req.body
+  members.push(user_id)
+  let group_id = uuid.v4()
+  const new_groupName = new GroupName({
+    group_name_id: uuid.v4(),
+    name: name,
+    group_id: group_id,
+  })
+  try{
+    await new_groupName.save()
+    await members.forEach(async (member) => {
+      var new_groupMembership = new GroupMembership({
+        group_membership_id: uuid.v4(),
+        user_id: member,
+        group_id: group_id
+      })
+
+      await new_groupMembership.save()
+    })
+    res.send({status: 0})
+  }
+  catch (err) {
+    console.log(err)
+    res.send({status: -1})
+  }
+})
+
+app.get('/api/users/getGroups', checkJwt, async (req, res) => {
+  const user_id = req.user.id;
+  var result = await GroupMembership.find({user_id: user_id})
+  result = await Promise.all(result.map(async (group) => {
+    const groupname = await GroupName.findOne({group_id: group.group_id})
+    const members = await GroupMembership.find({group_id: group.group_id})
+    const member_icons = await Promise.all(members.map(async (member) => {
+      const user = await User.findOne({user_id: member.user_id})
+      return {user_id: member.user_id, image: user.image}
+    }))
+    return {...group._doc, name: groupname.name, member_icons: member_icons}
+  }))
+  res.send({result: result, status: 0})
+})
+
+app.post('/api/users/uploadImage', checkJwt, async (req, res) => {
   const {image} = req.body
   const user_id = req.user.id;
   try {
@@ -303,7 +349,7 @@ app.post('/api/users/uploadImage', async (req, res) => {
   res.send({status: 0})
 })
 
-app.post('/api/messages/get', async (req, res) => {
+app.post('/api/messages/get', checkJwt, async (req, res) => {
   const {room} = req.body
   const result = await Message.find({room_id: room})
   result.sort((a, b) => (a.timestamp > b.timestamp) ? 1: -1)

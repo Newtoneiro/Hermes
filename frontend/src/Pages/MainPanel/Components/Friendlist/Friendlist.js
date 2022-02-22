@@ -1,13 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { BsPersonFill } from 'react-icons/bs';
+import {FaUsers, FaUser} from 'react-icons/fa'
 import { FetchContext } from '../../../../Fetch/AuthFetchContext';
 import Loading from '../../../../Loading/Loading';
 import { communicaitonContext } from '../CommunicationWindow/communicationContext';
 import './friendlist.css'
+import Friends from './Friends/Friends';
+import Groups from './Groups/Groups';
 
 const Friendlist = () => {
     const [friends, setFriends] = useState([])
+    const [groups, setGroups] = useState([])
     const [loading, setLoading] = useState(false)
+    const [friendsgroups, setFriendsgroups] = useState(0)
     const AuthFetchCon = useContext(FetchContext)
     const comCon = useContext(communicaitonContext)
 
@@ -15,10 +19,16 @@ const Friendlist = () => {
         async function execute(){
             setLoading(true)
             
-            const {data} = await AuthFetchCon.authFetch.get('users/getFriends')
+            var {data} = await AuthFetchCon.authFetch.get('users/getFriends')
             if (data.status === 0){
                 setFriends(data.result)
             }
+
+            const data2 = await AuthFetchCon.authFetch.get('users/getGroups')
+            if (data2.data.status === 0){
+                setGroups(data2.data.result)
+            }
+
             setLoading(false)
         }
 
@@ -30,20 +40,24 @@ const Friendlist = () => {
         comCon.setFriendImage(img)
     }
 
-    return <div className='Friendlist_main'>
-        {loading ? <div className='Friendlist_main-loading'><Loading/></div>:
-        friends.length === 0?
-        <h2>No friends yet!</h2>:
-        friends.map((friend) => {
-            return <div key={friend.friendships_id} className={`Friendlist_main-friend ${friend.friendships_id === comCon.room && 'friend-selected'}`}
-                    onClick={() => handleClick(friend.friendships_id, friend.image)}>
-                {friend.image !== '' ? <img className='Friendlist_main-friend_image' src={friend.image} alt='friend-pic'/> : <BsPersonFill className='Friendlist_main-friend_image'/>}
-                <div className='Friendlist_main-friend_username'>
-                    <h3>{friend.username}</h3>
+    return <>
+        <div className='Friendlist_main'>
+            <div className='Friendlist_choice'>
+                <div className={`Friendlist_choice-friends ${friendsgroups === 0 && 'Friendlist_choice-chosen'}`} onClick={() => setFriendsgroups(0)}>
+                    <FaUser/>
+                </div>
+                <div className={`Friendlist_choice-groups ${friendsgroups === 1 && 'Friendlist_choice-chosen'}`} onClick={() => setFriendsgroups(1)}>
+                    <FaUsers/>
                 </div>
             </div>
-        })}
-    </div>;
+            {loading ? <div className='Friendlist_main-loading'><Loading/></div>:
+            friendsgroups === 0 ? 
+            <Friends friends={friends} handleClick={handleClick}/>
+            :
+            <Groups friends={friends} groups={groups} setGroups={setGroups} handleClick={handleClick}/>
+            }
+        </div>
+    </>
 };
 
 export default Friendlist;

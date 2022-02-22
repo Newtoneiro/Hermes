@@ -1,3 +1,12 @@
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .Friendlist_main {
   width: 100%;
   height: 100%;
@@ -12,6 +21,42 @@
 
   animation: slide-left 0.7s;
   overflow-y: scroll;
+}
+
+.Friendlist_choice {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.Friendlist_choice-friends,
+.Friendlist_choice-groups {
+  color: var(--default-colour-14);
+  padding: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--default-colour-13);
+
+  border-left: solid 1px black;
+  border-right: solid 1px black;
+
+  cursor: pointer;
+
+  flex-grow: 1;
+
+  transition: 0.5s;
+}
+
+.Friendlist_choice-chosen {
+  color: var(--default-colour-15);
+  background-color: var(--default-colour-12);
+  transition: 0.5s;
 }
 
 .Friendlist_main-loading {
@@ -35,6 +80,7 @@
 .Friendlist_main-friend {
   width: 100%;
   height: 3em;
+  min-height: 41px;
 
   display: flex;
   align-items: center;
@@ -51,6 +97,8 @@
 
   transition: 0.5s;
   cursor: pointer;
+
+  animation: slide-left 0.4s;
 }
 
 .Friendlist_main-friend_image {
@@ -82,4 +130,137 @@
 .friend-selected {
   background-color: var(--default-colour-3);
   color: var(--default-colour-15);
+}
+
+.Groups_create {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+
+  color: var(--default-colour-15);
+
+  font-size: 21px;
+}
+
+.Groups_create-add {
+  cursor: pointer;
+  font-size: 30px;
+
+  transition: 0.5s;
+}
+
+.Groups_create-add:hover {
+  color: var(--default-colour-3);
+  transform: scale(1.1);
+  transition: 0.5s;
+}
+
+.Groups_creator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+
+  animation: fade-in 0.4s;
+  transition: 0.5s;
+}
+
+.Groups_creator-friendlist {
+  width: 50%;
+  height: 60%;
+
+  overflow-y: scroll;
+  z-index: 120;
+}
+
+.Groups_creator-controls {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Groups_creator-controls input {
+  width: 50%;
+  height: 40px;
+  outline: none;
+  border: none;
+  letter-spacing: 1px;
+  padding: 0;
+
+  text-align: center;
+
+  background-color: var(--default-colour-13);
+  color: var(--default-colour-15);
+}
+
+.Groups_creator-controls_buttons {
+  width: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-self: center;
+}
+
+.Groups_creator-controls_buttons-cancel,
+.Groups_creator-controls_buttons-accept {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 25px;
+  padding: 0.2em 0;
+
+  flex-grow: 1;
+}
+
+.Groups_creator-controls_buttons-cancel {
+  background-color: var(--default-colour-20);
+  transition: 0.5s;
+}
+
+.Groups_creator-controls_buttons-cancel:hover {
+  background-color: var(--default-colour-22);
+  transition: 0.5s;
+}
+
+.Groups_creator-controls_buttons-accept {
+  background-color: var(--default-colour-21);
+}
+
+.Groups_creator-controls_buttons-accept .rotating {
+  font-size: 25px;
+}
+
+.Groups_creator-controls_buttons-accept:hover {
+  background-color: var(--default-colour-23);
+  transition: 0.5s;
+}
+
+@media screen and (max-width: 900px) {
+  .Groups_creator-friendlist {
+    width: 75%;
+  }
+
+  .Groups_creator-controls input {
+    width: 75%;
+  }
+
+  .Groups_creator-controls_buttons {
+    width: 75%;
+  }
 }

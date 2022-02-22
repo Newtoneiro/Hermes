@@ -14,10 +14,11 @@ const Profile = () => {
     const submitImage = async (img) => {
         setImgLoading(true)
         
-        console.log('asdasd')
-        const {data} = await autchFetchCon.authFetch.post('users/uploadImage', {image: img})
-        if (data.status === 0){
-            authCon.setAuthInfo({...authCon.authState, userInfo: {...authCon.authState.userInfo, image: img}})
+        if (img.length < 2000000){
+            const {data} = await autchFetchCon.authFetch.post('users/uploadImage', {image: img})
+            if (data.status === 0){
+                authCon.setAuthInfo({...authCon.authState, userInfo: {...authCon.authState.userInfo, image: img}})
+            }
         }
  
         setImgLoading(false)
@@ -34,7 +35,7 @@ const Profile = () => {
             <div className='Profile-customization'>
                 <div className='Profile-customization_cluster'>
                     <h2>Select image:</h2>
-                    <FileBase64 multiple = {false} onDone={({base64}) => submitImage(base64)} accept="image/png, image/jpeg"/>
+                    <FileBase64 multiple = {false} onDone={({base64}) => submitImage(base64)} accept=".jpg,.png"/>
                 </div>
             </div>
         </div>

@@ -31,6 +31,7 @@ const CommunicationWindowMain = () => {
           <div className='communicaiton-main_messages'>
             {comCon.loading? <div className='communication-main_loading'><Loading className='loading'/></div> :
             comCon.messages.map((mess) => {
+              const sender_image = comCon.friendImage.find((friend) => friend.user_id === mess.sender_id)
               return <div key={mess.message_id} className={`message-box ${mess.sender_id === AuthCon.authState.userInfo.id && 'sender'}`}>
                   <div className='message'>
                     <h2>{mess.text}</h2>
@@ -38,7 +39,7 @@ const CommunicationWindowMain = () => {
                   {mess.sender_id === AuthCon.authState.userInfo.id ?
                   (AuthCon.authState.userInfo.image !== '' ? <img className='message-picture' src={AuthCon.authState.userInfo.image} alt='pic'/> 
                   : <BsPersonFill className='message-picture_dummy'></BsPersonFill>)
-                  :(comCon.friendImage !== '' ? <img className='message-picture' src={comCon.friendImage} alt='pic'/> 
+                  :(sender_image.image !== '' ? <img className='message-picture' src={sender_image.image} alt='pic'/> 
                   : <BsPersonFill className='message-picture_dummy'></BsPersonFill>)}
                 </div>
             })}  
