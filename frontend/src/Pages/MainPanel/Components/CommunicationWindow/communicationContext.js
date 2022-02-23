@@ -13,6 +13,7 @@ const CommunicationProvider = ({children}) => {
 
     const [allLoaded, setAllLoaded] = useState(false)
     const [loadingLoading, setLoadingLoading] = useState(false)
+    const [displayScrollToBottom, setDisplayScrollToBottom] = useState(false)
 
     const dummy = useRef()
     const loadMore = useRef()
@@ -108,6 +109,16 @@ const CommunicationProvider = ({children}) => {
                 setLoadingLoading(false)
             }
         }
+        if (document.getElementById('message-first') && document.getElementById('communication-main_messages'))
+        {
+            if (document.getElementById('message-first').getBoundingClientRect().y > document.getElementById('communication-main_messages').getBoundingClientRect().bottom + 100)
+            {
+                setDisplayScrollToBottom(true)
+            }
+            else {
+                setDisplayScrollToBottom(false)
+            }
+        }
     }
 
     return <communicaitonContext.Provider value={{
@@ -123,7 +134,8 @@ const CommunicationProvider = ({children}) => {
         setFriendImage,
         loadMore,
         handleScroll,
-        loadingLoading
+        loadingLoading,
+        displayScrollToBottom
     }}>
         {children}
     </communicaitonContext.Provider>

@@ -13,10 +13,24 @@ import Profile from "../Profile/Profile";
 
 const Sidepanel = () => {
   const [state, setState] = useState(0);
+  const [hideAnimation, setHideAnimation] = useState(false)
+
+  const hidePanel = () => {
+    setHideAnimation(true)
+    setTimeout(() => {
+      setHideAnimation(false)
+      setState(0)
+    }, 350)
+  }
 
   const updateState = (val) => {
     if (state === val){
-      setState(0)
+      if (window.screen.width <= 900){
+        hidePanel()
+      }
+      else{
+        setState(0)
+      }
     }
     else {
       setState(val)
@@ -59,8 +73,8 @@ const Sidepanel = () => {
           </div>
         </div>
       </div>
-        {state !== 0 && <div className="default-block">
-          {state === 1 && <Friendlist />}
+        {state !== 0 && <div id="default-block" className={`default-block ${hideAnimation && 'hiding'}`}>
+          {state === 1 && <Friendlist hidePanel={hidePanel} />}
           {state === 2 && <AddFriend />}
           {state === 3 && <FriendRequests />}
           {state === 4 && <Profile/>}

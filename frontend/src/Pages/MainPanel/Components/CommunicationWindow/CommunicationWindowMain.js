@@ -3,6 +3,7 @@ import { BsPersonFill } from 'react-icons/bs'
 import { AuthContext } from '../../../../AuthContext/Authcontext'
 import Loading from '../../../../Loading/Loading'
 import { communicaitonContext } from './communicationContext'
+import {AiOutlineDownCircle} from 'react-icons/ai'
 import './communicationwindowmain.css'
 
 
@@ -28,14 +29,14 @@ const CommunicationWindowMain = () => {
 
   return (<div className='communication-main'>
         {comCon.room === '' ?  <h2>Select room</h2> :<>
-          <div className='communicaiton-main_messages' onScroll={(e) => comCon.handleScroll(e)}>
+          <div className='communicaiton-main_messages' onScroll={(e) => comCon.handleScroll(e)} id='communication-main_messages'>
             <div ref={comCon.loadMore} className='communication-main_messages-loadMoreCatcher'>
               {comCon.loadingLoading && <Loading/>}
             </div>
             {comCon.loading? <div className='communication-main_loading'><Loading className='loading'/></div> :
             comCon.messages.map((mess) => {
               const sender_image = (comCon.friendImage.find((friend) => friend.user_id === mess.sender_id) || {image: ''})
-              return <div key={mess.message_id} id={mess.message_id === comCon.messages[0].message_id ? 'message-last' : 'message'} className={`message-box ${mess.sender_id === AuthCon.authState.userInfo.id && 'sender'}`}>
+              return <div key={mess.message_id} id={mess.message_id === comCon.messages[0].message_id ? 'message-last' : (mess.message_id === comCon.messages[comCon.messages.length - 1].message_id ? 'message-first' : 'message')} className={`message-box ${mess.sender_id === AuthCon.authState.userInfo.id && 'sender'}`}>
                   <div className='message'>
                     <h2>{mess.text}</h2>
                   </div>
@@ -45,10 +46,11 @@ const CommunicationWindowMain = () => {
                   :(sender_image.image !== '' ? <img className='message-picture' src={sender_image.image} alt='pic'/> 
                   : <BsPersonFill className='message-picture_dummy'></BsPersonFill>)}
                 </div>
-            })}  
+            })}
           <div ref={comCon.dummy}></div>
         </div>
         <form className='communication-main_send' onSubmit={(e) => handleSubmit(e)}>
+          {comCon.displayScrollToBottom && <div className='messages-scroll_to_bottom' onClick={() => {comCon.dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})}}><AiOutlineDownCircle/></div>}
           <input type='text' className='communication-main-input' value={text} onChange={(e) => setText(e.target.value)} maxLength={200}></input>
           <button type='submit' className='communication-main-button' onClick={(e) => handleSubmit(e)}>Send</button>
         </form>

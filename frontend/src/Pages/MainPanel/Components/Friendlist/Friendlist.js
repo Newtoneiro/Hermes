@@ -7,7 +7,7 @@ import './friendlist.css'
 import Friends from './Friends/Friends';
 import Groups from './Groups/Groups';
 
-const Friendlist = () => {
+const Friendlist = ({hidePanel}) => {
     const [friends, setFriends] = useState([])
     const [groups, setGroups] = useState([])
     const [loading, setLoading] = useState(false)
@@ -38,6 +38,9 @@ const Friendlist = () => {
     const handleClick = (room, img) => {
         comCon.joinRoom(room)
         comCon.setFriendImage(img)
+        if (window.screen.width <= 900){
+            hidePanel()
+        }
     }
 
     return <>
