@@ -10,7 +10,12 @@ const CommunicationProvider = ({children}) => {
     const [messages, setMessages] = useState([])
     const [loading, setLoading] = useState(false)
     const [friendImage, setFriendImage] = useState([])
+
+    const [allLoaded, setAllLoaded] = useState(false)
+    const [loadingLoading, setLoadingLoading] = useState(false)
+
     const dummy = useRef()
+    const loadMore = useRef()
 
     const authFetchCon = useContext(FetchContext)
 
@@ -38,13 +43,15 @@ const CommunicationProvider = ({children}) => {
                     room: room,
                 }).then(({data}) => {
                     if (data.status === 0){
-                        setMessages(data.result)
+                        setMessages(data.result.reverse())
                         setLoading(false)
-                        if (dummy.current){
-                            setTimeout(() => {
-                            dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})
-                            }, 300);
+                        if (data.allLoaded){
+                            setAllLoaded(true)
                         }
+                        if (dummy.current){
+                            dummy.current.scrollIntoView({behavior: "auto", block: "start", inline: "end"})
+                        }
+                        setAllLoaded(false)
                     }
                     else{
                         setLoading(false)
@@ -64,6 +71,7 @@ const CommunicationProvider = ({children}) => {
             
             setMessages([])
             setRoom(new_room)
+            setAllLoaded(false)
         }
     }
 
@@ -72,6 +80,34 @@ const CommunicationProvider = ({children}) => {
         setTimeout(() => {
             dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})
         }, 100);
+    }
+
+    const handleScroll = async (e) => {
+        if (!allLoaded && !loadingLoading)
+        {
+            if (loadMore.current.getBoundingClientRect().top >= e.target.getBoundingClientRect().top - 2)
+            {
+                setLoadingLoading(true)
+                if (messages.length > 0){
+                    await authFetchCon.authFetch.post('messages/get', {
+                            room: room,
+                            timestamp: messages[0].timestamp,
+                    }).then(({data}) => {
+                        var last_message = document.getElementById('message-last')
+                        
+                        var messages_reverse = data.result.reverse()
+                        messages_reverse = messages_reverse.concat(messages)
+                        setMessages(messages_reverse)
+                        
+                        last_message.scrollIntoView({block: "start", inline: "end"})
+                        if (data.allLoaded){
+                            setAllLoaded(true)
+                        }
+                    })
+                }
+                setLoadingLoading(false)
+            }
+        }
     }
 
     return <communicaitonContext.Provider value={{
@@ -84,7 +120,10 @@ const CommunicationProvider = ({children}) => {
         loading,
         dummy,
         friendImage,
-        setFriendImage
+        setFriendImage,
+        loadMore,
+        handleScroll,
+        loadingLoading
     }}>
         {children}
     </communicaitonContext.Provider>

@@ -350,13 +350,22 @@ app.post('/api/users/uploadImage', checkJwt, async (req, res) => {
 })
 
 app.post('/api/messages/get', checkJwt, async (req, res) => {
-  const {room} = req.body
-  const result = await Message.find({room_id: room})
-  result.sort((a, b) => (a.timestamp > b.timestamp) ? 1: -1)
+  const {room, timestamp} = req.body
+  var result;
+  var allMessagesLoaded = false;
+  if (!timestamp){
+    result = await Message.find({room_id: room}, null, {skip: 0, limit: 20, sort: {timestamp: -1}})
+  }
+  else {
+    result = await Message.find({room_id: room, timestamp: {$lt: parseInt(timestamp)}}, null, {skip: 0, limit: 20, sort: {timestamp: -1}})
+  }
+  if (result.length < 20){
+    allMessagesLoaded = true
+  }
   result.forEach((res) => {
     res.text = decryptMessage(res.text)
   })
-  res.send({result: result, status: 0})
+  res.send({result: result, status: 0, allLoaded: allMessagesLoaded})
 })
 
 // Socket stuff

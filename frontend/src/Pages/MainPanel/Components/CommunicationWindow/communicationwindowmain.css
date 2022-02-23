@@ -180,3 +180,11 @@
     font-size: 12px;
   }
 }
+
+.communication-main_messages-loadMoreCatcher {
+  height: 20px;
+  color: var(--default-colour-15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

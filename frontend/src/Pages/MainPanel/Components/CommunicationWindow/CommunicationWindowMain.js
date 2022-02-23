@@ -28,11 +28,14 @@ const CommunicationWindowMain = () => {
 
   return (<div className='communication-main'>
         {comCon.room === '' ?  <h2>Select room</h2> :<>
-          <div className='communicaiton-main_messages'>
+          <div className='communicaiton-main_messages' onScroll={(e) => comCon.handleScroll(e)}>
+            <div ref={comCon.loadMore} className='communication-main_messages-loadMoreCatcher'>
+              {comCon.loadingLoading && <Loading/>}
+            </div>
             {comCon.loading? <div className='communication-main_loading'><Loading className='loading'/></div> :
             comCon.messages.map((mess) => {
-              const sender_image = comCon.friendImage.find((friend) => friend.user_id === mess.sender_id)
-              return <div key={mess.message_id} className={`message-box ${mess.sender_id === AuthCon.authState.userInfo.id && 'sender'}`}>
+              const sender_image = (comCon.friendImage.find((friend) => friend.user_id === mess.sender_id) || {image: ''})
+              return <div key={mess.message_id} id={mess.message_id === comCon.messages[0].message_id ? 'message-last' : 'message'} className={`message-box ${mess.sender_id === AuthCon.authState.userInfo.id && 'sender'}`}>
                   <div className='message'>
                     <h2>{mess.text}</h2>
                   </div>
