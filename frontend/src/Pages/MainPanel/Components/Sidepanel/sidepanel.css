@@ -107,10 +107,10 @@
 
   .default-block {
     width: calc(100% - 100px);
-    height: calc(100% - 60px);
+    height: 100%;
     margin-left: 100px;
-    top: 60px;
-    position: fixed;
+
+    position: absolute;
 
     z-index: 1;
 
