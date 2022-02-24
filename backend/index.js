@@ -59,7 +59,7 @@ const {
   const FriendshipRequest = require('./Models/friendship_request')
   const Message = require('./Models/message')
   const GroupMembership = require('./Models/group_membership')
-  const GroupName = require('./Models/group_name')
+  const GroupInfo = require('./Models/group_info')
   
   mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@hermes.bnfuz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, {useNewUrlParser: true}, () => {
     console.log('Connected to mongoDB')
@@ -297,13 +297,14 @@ app.post('/api/users/createGroup', checkJwt, async (req, res) => {
   const {members, name} = req.body
   members.push(user_id)
   let group_id = uuid.v4()
-  const new_groupName = new GroupName({
+  const new_GroupInfo = new GroupInfo({
     group_name_id: uuid.v4(),
     name: name,
     group_id: group_id,
+    owner_id: user_id,
   })
   try{
-    await new_groupName.save()
+    await new_GroupInfo.save()
     await members.forEach(async (member) => {
       var new_groupMembership = new GroupMembership({
         group_membership_id: uuid.v4(),
@@ -325,15 +326,60 @@ app.get('/api/users/getGroups', checkJwt, async (req, res) => {
   const user_id = req.user.id;
   var result = await GroupMembership.find({user_id: user_id})
   result = await Promise.all(result.map(async (group) => {
-    const groupname = await GroupName.findOne({group_id: group.group_id})
+    const group_info = await GroupInfo.findOne({group_id: group.group_id})
     const members = await GroupMembership.find({group_id: group.group_id})
+    const ownerUsername = await User.findOne({user_id: group_info.owner_id})
     const member_icons = await Promise.all(members.map(async (member) => {
       const user = await User.findOne({user_id: member.user_id})
-      return {user_id: member.user_id, image: user.image}
+      return {user_id: member.user_id, image: user.image, username: user.username}
     }))
-    return {...group._doc, name: groupname.name, member_icons: member_icons}
+    return {...group._doc, name: group_info.name, member_icons: member_icons, owner_username: ownerUsername.username, ownerID: ownerUsername.user_id}
   }))
   res.send({result: result, status: 0})
+})
+
+app.post('/api/users/promoteGroup', checkJwt, async (req, res) => {
+  const {user_id, group_id} = req.body
+  try {
+    await GroupInfo.findOneAndUpdate({group_id: group_id}, {owner_id: user_id})
+  }
+  catch (err){
+    console.log(err)
+    res.send({status: -1})
+  }
+  res.send({status: 0})
+})
+
+app.post('/api/users/removeFromGroup', checkJwt, async (req, res) => {
+  const {user_id, group_id} = req.body
+  try {
+    await GroupMembership.findOneAndDelete({group_id: group_id, user_id: user_id})
+  }
+  catch (err){
+    console.log(err)
+    res.send({status: -1})
+  }
+  res.send({status: 0})
+})
+
+app.post('/api/users/addUsersToGroup', checkJwt, async (req, res) => {
+  const {group_id, members} = req.body
+  try{
+    await members.forEach(async (member) => {
+      var new_groupMembership = new GroupMembership({
+        group_membership_id: uuid.v4(),
+        user_id: member,
+        group_id: group_id
+      })
+
+      await new_groupMembership.save()
+    })
+    res.send({status: 0})
+  }
+  catch (err) {
+    console.log(err)
+    res.send({status: -1})
+  }
 })
 
 app.post('/api/users/uploadImage', checkJwt, async (req, res) => {

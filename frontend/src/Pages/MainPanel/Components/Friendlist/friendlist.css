@@ -15,6 +15,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  position: relative;
 
   font-family: var(--font-family);
   font-weight: 800;
@@ -78,7 +79,7 @@
 .Friendlist_main-friend {
   width: 100%;
   height: 3em;
-  min-height: 41px;
+  min-height: 49px;
 
   display: flex;
   align-items: center;
@@ -95,6 +96,8 @@
 
   transition: 0.5s;
   cursor: pointer;
+
+  animation: slide-left 0.7s;
 }
 
 .Friendlist_main-friend_image {
@@ -108,7 +111,7 @@
 
 .Friendlist_main-friend_username {
   flex-grow: 1;
-
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -167,7 +170,7 @@
   height: 100%;
 
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  z-index: 200;
 
   animation: fade-in 0.4s;
   transition: 0.5s;
@@ -176,6 +179,8 @@
 .Groups_creator-friendlist {
   width: 50%;
   height: 60%;
+
+  background-color: var(--default-colour-12);
 
   overflow-y: scroll;
   z-index: 120;
@@ -247,6 +252,160 @@
   transition: 0.5s;
 }
 
+.group-more {
+  position: absolute;
+  left: 90%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  transition: 0.5s;
+}
+
+.group-more:hover {
+  color: var(--default-colour-1);
+  transform: scale(1.2);
+  transition: 0.5s;
+}
+
+.group-more_clicked {
+  transform: rotate(90deg);
+  transition: 0.5s;
+}
+
+.group-more_clicked:hover {
+  transform: rotate(90deg);
+  transition: 0.5s;
+}
+
+@keyframes expand {
+  0% {
+    max-height: 0;
+  }
+  100% {
+    max-height: 500px;
+  }
+}
+
+.group-menu {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--default-colour-13);
+  border-bottom: solid 1px black;
+  animation: expand 0.7s;
+}
+
+.group-menu_members {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+
+  font-family: var(--font-family);
+  font-weight: 800;
+  overflow-y: scroll;
+}
+
+.group-menu_members-member {
+  width: 100%;
+  height: 3em;
+  min-height: 49px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: var(--default-colour-12);
+
+  color: var(--default-colour-15);
+  font-family: var(--font-family);
+  font-weight: 800;
+  letter-spacing: 2px;
+
+  border-bottom: solid 1px var(--default-colour-13);
+
+  transition: 0.5s;
+}
+
+.group-menu_members-member h2 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.group-menu_members-member .Friendlist_main-friend_image {
+  margin-left: 10px;
+}
+
+.group-menu_members-member-owner {
+  color: var(--default-colour-3);
+}
+
+.member-owner {
+  margin-left: 0.5em;
+  color: var(--default-colour-1);
+}
+
+.group-menu_members-member_options {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 20%;
+  cursor: pointer;
+
+  transition: 0.5s;
+}
+
+.options-remove:hover {
+  color: var(--default-colour-20);
+  transform: scale(1.1);
+  transition: 0.5s;
+}
+
+.options-promote:hover {
+  color: var(--default-colour-1);
+  transform: scale(1.1);
+  transition: 0.5s;
+}
+
+.group-menu .rotating {
+  font-size: 25px;
+  margin: 0.2em 0;
+  color: var(--default-colour-10);
+}
+
+.group-menu_add-member {
+  min-width: 30px;
+  min-height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 0.2em;
+
+  font-size: 20px;
+  cursor: pointer;
+  background-color: var(--default-colour-10);
+  color: var(--default-colour-15);
+  transition: 0.5s;
+}
+
+.group-menu_add-member:hover {
+  background-color: var(--default-colour-1);
+  transition: 0.5s;
+}
+
 @media screen and (max-width: 900px) {
   .Groups_creator-friendlist {
     width: 75%;
@@ -258,5 +417,15 @@
 
   .Groups_creator-controls_buttons {
     width: 75%;
+  }
+
+  .group-more {
+    left: 85%;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .group-menu_members-member h2 {
+    font-size: 15px;
   }
 }

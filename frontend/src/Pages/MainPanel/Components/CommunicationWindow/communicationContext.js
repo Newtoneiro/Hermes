@@ -73,6 +73,7 @@ const CommunicationProvider = ({children}) => {
             setMessages([])
             setRoom(new_room)
             setAllLoaded(false)
+            setDisplayScrollToBottom(false)
         }
     }
 

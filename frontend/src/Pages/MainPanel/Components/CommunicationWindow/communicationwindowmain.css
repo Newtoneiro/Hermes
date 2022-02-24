@@ -165,6 +165,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  color: var(--default-colour-3);
 }
 
 .communication-main_loading .rotating {

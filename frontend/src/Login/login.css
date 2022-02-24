@@ -137,3 +137,17 @@
   text-decoration: none;
   color: var(--default-colour-2);
 }
+
+@media screen and (max-width: 500px) {
+  .Login_main {
+    width: 85%;
+  }
+
+  .Login_main-register h3 {
+    font-size: 12px;
+  }
+
+  .Login_main-register a {
+    font-size: 15px;
+  }
+}

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const GroupNameSchema = mongoose.Schema({
+const GroupInfoSchema = mongoose.Schema({
     group_name_id: {
         type: String,
         required: true,
@@ -13,6 +13,10 @@ const GroupNameSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    owner_id: {
+        type: String,
+        required: true
+    }
 })
 
-module.exports = mongoose.model('groupName', GroupNameSchema)
+module.exports = mongoose.model('groupInfo', GroupInfoSchema)

@@ -11,6 +11,24 @@
   }
 }
 
+@keyframes slide-left-special {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+    z-index: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  99% {
+    z-index: 1;
+  }
+  100% {
+    transform: translateX(0);
+    z-index: 200;
+  }
+}
+
 .Sidepanel_main {
   height: 100%;
   min-width: 100px;
@@ -34,7 +52,7 @@
   justify-content: flex-start;
 
   background: var(--default-colour-11);
-  z-index: 20;
+  z-index: 10;
 
   flex-grow: 1;
 }
@@ -111,10 +129,9 @@
     margin-left: 100px;
 
     position: absolute;
+    z-index: 20;
 
-    z-index: 1;
-
-    animation: slide-left 0.4s;
+    animation: slide-left-special 0.4s;
   }
 }
 
