@@ -21,9 +21,6 @@ const CommunicationWindowMain = () => {
       }
       comCon.sendMessage(message)
       setText('')
-      setTimeout(() => {
-        comCon.dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})
-      }, 20)
     }
   }
 

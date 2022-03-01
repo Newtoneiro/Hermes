@@ -417,30 +417,36 @@ app.post('/api/messages/get', checkJwt, async (req, res) => {
 // Socket stuff
 
 io.on("connection", socket => {
-  socket.on('send-message', (message, room) => {
-    let id = uuid.v4();
-    
-    const encrypted_text = encryptMessage(message.text)
-    
-    const encrypted_message = new Message({
-      message_id: id,
-      room_id: room,
-      sender_id: message.sender_id,
-      text: encrypted_text,
-      timestamp: Date.now().toString()
-    })
-    
-    const new_message = {
-      message_id: id,
-      room_id: room,
-      sender_id: message.sender_id,
-      text: message.text,
-      timestamp: Date.now().toString()
+  socket.on('send-message', async (user_id, message, room) => {
+    const verify = await GroupMembership.findOne({group_id: room, user_id: user_id})
+    if (verify){
+      let id = uuid.v4();
+      
+      const encrypted_text = encryptMessage(message.text)
+      
+      const encrypted_message = new Message({
+        message_id: id,
+        room_id: room,
+        sender_id: message.sender_id,
+        text: encrypted_text,
+        timestamp: Date.now().toString()
+      })
+      
+      const new_message = {
+        message_id: id,
+        room_id: room,
+        sender_id: message.sender_id,
+        text: message.text,
+        timestamp: Date.now().toString()
+      }
+      
+      await encrypted_message.save().then(() => {
+        io.in(room).emit("receive-message", new_message)
+      })
     }
-    
-    encrypted_message.save().then(() => {
-      io.in(room).emit("receive-message", new_message)
-    })
+    else{
+      console.log('No permissions to send message on this channel')
+    }
   })
 
   socket.on("join-room", room => {
@@ -449,5 +455,16 @@ io.on("connection", socket => {
 
   socket.on("leave-room", room => {
     socket.leave(room)
+  })
+
+  socket.on("kick-user", async (user_id, group_id) => {
+    try{
+      await GroupMembership.findOneAndDelete({group_id : group_id, user_id: user_id}).then(() => {
+        io.in(user_id).emit("get-kicked", group_id)
+      })
+    }
+    catch{
+      console.log('something went wrong with kicking the user')
+    }
   })
 })

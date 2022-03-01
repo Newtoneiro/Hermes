@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
+import { AuthContext } from "../../../../AuthContext/Authcontext";
 import { FetchContext } from "../../../../Fetch/AuthFetchContext";
+import { FriendlistContext } from "../Friendlist/FriendlistContext";
 
 const communicaitonContext = createContext()
 
@@ -19,6 +21,8 @@ const CommunicationProvider = ({children}) => {
     const loadMore = useRef()
 
     const authFetchCon = useContext(FetchContext)
+    const AuthCon = useContext(AuthContext)
+    const FriendlistCon = useContext(FriendlistContext)
 
     useEffect(() => {
         async function createSocket(){
@@ -28,9 +32,21 @@ const CommunicationProvider = ({children}) => {
                         return [...old, message]
                     })
                     setTimeout(() => {
-                        dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})
+                        if (dummy){
+                            dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})
+                        }
                     }, 300);
                 })
+            
+            new_socket.on('get-kicked', (group_id) => {
+                setMessages([...messages, {message_id: 'abc', text: 'You\'ve been kicked from this conversation'}])
+                FriendlistCon.setGroups(prev => {
+                    return prev.filter((group) => group.group_id !== group_id)
+                })
+                new_socket.emit('leave-room', group_id)
+            })
+
+            new_socket.emit('join-room', AuthCon.authState.userInfo.id)
             setSocket(new_socket)
         }
         createSocket()
@@ -78,10 +94,7 @@ const CommunicationProvider = ({children}) => {
     }
 
     const sendMessage = async (message) => {
-        await socket.emit('send-message', message, room)
-        setTimeout(() => {
-            dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})
-        }, 100);
+        await socket.emit('send-message', AuthCon.authState.userInfo.id, message, room)
     }
 
     const handleScroll = async (e) => {

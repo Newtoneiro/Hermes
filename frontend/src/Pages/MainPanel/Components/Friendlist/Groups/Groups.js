@@ -9,8 +9,9 @@ import { FetchContext } from '../../../../../Fetch/AuthFetchContext'
 import Loading from '../../../../../Loading/Loading'
 import { communicaitonContext } from '../../CommunicationWindow/communicationContext'
 import { AuthContext } from '../../../../../AuthContext/Authcontext'
+import { FriendlistContext } from '../FriendlistContext'
 
-const Groups = ({friends, groups, setGroups, handleClick}) => {
+const Groups = ({clickHandle}) => {
     const [popupState, setPopupState] = useState(0)
     const [groupMembers, setGroupMembers] = useState([])
     const [groupName, setGroupName] = useState('')
@@ -27,6 +28,7 @@ const Groups = ({friends, groups, setGroups, handleClick}) => {
     const authFetchCon = useContext(FetchContext)
     const comCon = useContext(communicaitonContext)
     const AuthCon = useContext(AuthContext)
+    const FriendlistCon = useContext(FriendlistContext)
 
     const updateAddGroup = (e) => {
         if (e.target.id === 'Groups_creator'){
@@ -85,7 +87,7 @@ const Groups = ({friends, groups, setGroups, handleClick}) => {
             if (data.status === 0){
                 var result = await authFetchCon.authFetch.get('users/getGroups')
                 if (result.data.status === 0){
-                    setGroups(result.data.result)
+                    FriendlistCon.setGroups(result.data.result)
                 }
             }
         }
@@ -103,7 +105,7 @@ const Groups = ({friends, groups, setGroups, handleClick}) => {
             if (data.status === 0){
                 var result = await authFetchCon.authFetch.get('users/getGroups')
                 if (result.data.status === 0){
-                    setGroups(result.data.result)
+                    FriendlistCon.setGroups(result.data.result)
                 }
             }
         }
@@ -115,7 +117,7 @@ const Groups = ({friends, groups, setGroups, handleClick}) => {
         if (e.target.id === 'change_group'){
             setDisplayGroupMenu(false)
             setDisplayedGroup({})
-            handleClick(group_id, member_icons)
+            clickHandle(group_id, member_icons)
         }
     }
 
@@ -138,7 +140,7 @@ const Groups = ({friends, groups, setGroups, handleClick}) => {
             if (data.status === 0){
                 result = await authFetchCon.authFetch.get('users/getGroups')
                 if (result.data.status === 0){
-                    setGroups(result.data.result)
+                    FriendlistCon.setGroups(result.data.result)
                 }
             }
         }
@@ -147,7 +149,8 @@ const Groups = ({friends, groups, setGroups, handleClick}) => {
             if (data.status === 0){
                 result = await authFetchCon.authFetch.get('users/getGroups')
                 if (result.data.status === 0){
-                    setGroups(result.data.result)
+                    comCon.socket.emit('kick-user', user_id, displayedGroup.group_id)
+                    FriendlistCon.setGroups(result.data.result)
                 }
             }
         }
@@ -172,9 +175,12 @@ const Groups = ({friends, groups, setGroups, handleClick}) => {
                         </div>
                     </div>
             })}
+            {
+            AuthCon.authState.userInfo.id === displayedGroup.ownerID &&
             <div className='group-menu_add-member' onClick={() => setPopupState(2)}>
                 <HiUserAdd/>
             </div>
+            }
             </div>
             }
         </div>
@@ -186,7 +192,7 @@ const Groups = ({friends, groups, setGroups, handleClick}) => {
         <AiFillPlusCircle className='Groups_create-add' onClick={() => setPopupState(1)}/>
         {popupState === 1 && <div id='Groups_creator' className='Groups_creator' onClick={(e) => updateAddGroup(e)}>
             <div className='Groups_creator-friendlist'>
-            {friends.map((friend) => {
+            {FriendlistCon.friends.map((friend) => {
                 return <div key={friend.friendships_id} className={`Friendlist_main-friend ${groupMembers.includes(friend.friend_id) && 'friend-selected'}`} onClick={() => updateGroupMembers(friend.friend_id)}>
                     {friend.image !== '' ? <img className='Friendlist_main-friend_image' src={friend.image} alt='friend-pic'/> : <BsPersonFill className='Friendlist_main-friend_image'/>}
                     <div className='Friendlist_main-friend_username'>
@@ -210,7 +216,7 @@ const Groups = ({friends, groups, setGroups, handleClick}) => {
         
         {(popupState === 2 && AuthCon.authState.userInfo.id === displayedGroup.ownerID) && <div id='Groups_creator' className='Groups_creator' onClick={(e) => updateAddGroup(e)}>
             <div className='Groups_creator-friendlist'>
-            {friends.map((friend) => {
+            {FriendlistCon.friends.map((friend) => {
                 if (!displayedGroup.member_icons.map((icon) => {return icon.user_id}).includes(friend.friend_id)){
                     return <div key={friend.friendships_id} className={`Friendlist_main-friend ${usersToAdd.includes(friend.friend_id) && 'friend-selected'}`} onClick={() => updateUsersToAdd(friend.friend_id)}>
                         {friend.image !== '' ? <img className='Friendlist_main-friend_image' src={friend.image} alt='friend-pic'/> : <BsPersonFill className='Friendlist_main-friend_image'/>}
@@ -237,7 +243,7 @@ const Groups = ({friends, groups, setGroups, handleClick}) => {
         </div>}
         
         </div>
-        {groups.map((group) => {
+        {FriendlistCon.groups.map((group) => {
                 return <React.Fragment key={group.group_id}><div id='change_group' className={`Friendlist_main-friend ${group.group_id === comCon.room && 'friend-selected'}`}
                     onClick={(e) => handleGroupChange(e, group.group_id, group.member_icons)}>
                     <div id='change_group' className='Friendlist_main-friend_username'>
