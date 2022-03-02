@@ -39,18 +39,35 @@ const CommunicationProvider = ({children}) => {
                 })
             
             new_socket.on('get-kicked', (group_id) => {
-                setMessages([...messages, {message_id: 'abc', text: 'You\'ve been kicked from this conversation'}])
+                if (group_id === room){
+                    setMessages([...messages, {message_id: 'abc', text: 'You\'ve been kicked from this conversation'}])
+                }
                 FriendlistCon.setGroups(prev => {
                     return prev.filter((group) => group.group_id !== group_id)
                 })
                 new_socket.emit('leave-room', group_id)
             })
 
+            new_socket.on('group-delete-alert', (group_id) => {
+                if (group_id === room){
+                    setMessages([...messages, {message_id: 'abc', text: 'This group has been deleted'}])
+                }
+                FriendlistCon.setGroups(prev => {
+                    return prev.filter((group) => group.group_id !== group_id)
+                })
+                new_socket.emit('leave-room', group_id)
+            })
+
+            new_socket.on('add-user-to-group-alert', () => {
+                FriendlistCon.loadGroups(false)
+            })
+
             new_socket.emit('join-room', AuthCon.authState.userInfo.id)
             setSocket(new_socket)
         }
+        
         createSocket()
-    }, [])
+    }, [room])
 
     useEffect(() => {
         setLoading(true)
@@ -61,7 +78,6 @@ const CommunicationProvider = ({children}) => {
                 }).then(({data}) => {
                     if (data.status === 0){
                         setMessages(data.result.reverse())
-                        setLoading(false)
                         if (data.allLoaded){
                             setAllLoaded(true)
                         }
@@ -71,14 +87,15 @@ const CommunicationProvider = ({children}) => {
                         setAllLoaded(false)
                     }
                     else{
-                        setLoading(false)
                         console.log('There was an error loading messages')
                     }
                 })
             }
         
-            fetchMessages()
+        fetchMessages()
+        setLoading(false)
         }
+    
     }, [room, authFetchCon.authFetch])
 
     const joinRoom = (new_room) => {

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { FetchContext } from "../../../../Fetch/AuthFetchContext";
 
 const FriendlistContext = createContext()
@@ -10,24 +10,47 @@ const FriendlistProvider = ({children}) => {
     const [friendsgroups, setFriendsgroups] = useState(0)
     
     const AuthFetchCon = useContext(FetchContext)
+
+    const loadFriends = async (load) => {
+        if (load){
+            setLoading(true)
+        }
+        await AuthFetchCon.authFetch.get('users/getFriends').then(({data}) => {
+            if (data.status === 0){
+                setFriends(data.result)
+            }
+        })
+        if (load){
+            setLoading(false)
+        }
+    }
+
+    const loadGroups = async (load) => {
+        if (load){
+            setLoading(true)
+        }
+        await AuthFetchCon.authFetch.get('users/getGroups').then(({data}) => {
+            if (data.status === 0){
+                setGroups(data.result)
+            }
+        })
+        if (load){
+            setLoading(false)
+        }
+    }
+
+    const loadData = async () => {
+        setLoading(true)
+            
+        await loadFriends(false)
+        await loadGroups(false)
+
+        setLoading(false)
+    }
     
     useEffect(() => {
         async function execute(){
-            setLoading(true)
-            
-            await AuthFetchCon.authFetch.get('users/getFriends').then(({data}) => {
-                if (data.status === 0){
-                    setFriends(data.result)
-                }
-            })
-
-            await AuthFetchCon.authFetch.get('users/getGroups').then(({data}) => {
-                if (data.status === 0){
-                    setGroups(data.result)
-                }
-            })
-
-            setLoading(false)
+            await loadData()
         }
 
         execute()
@@ -40,6 +63,9 @@ const FriendlistProvider = ({children}) => {
         loading,
         friendsgroups,
         setFriendsgroups,
+        loadData,
+        loadFriends,
+        loadGroups
     }}>
         {children}
     </FriendlistContext.Provider>

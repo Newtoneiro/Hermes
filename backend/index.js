@@ -433,15 +433,12 @@ app.post('/api/messages/get', checkJwt, async (req, res) => {
 io.on("connection", socket => {
   socket.on('send-message', async (user_id, message, room) => {
     const isGroup = await GroupInfo.findOne({group_id: room})
-    console.log(isGroup)
     var verify;
     if (isGroup){
       verify = await GroupMembership.findOne({group_id: room, user_id: user_id})
-      console.log(verify)
     }
     else{
       verify = await Friendship.findOne({friendships_id: room})
-      console.log(verify)
     }
     
     if (verify){

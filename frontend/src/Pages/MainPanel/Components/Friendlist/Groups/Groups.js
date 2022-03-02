@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import {AiFillPlusCircle} from 'react-icons/ai'
+import {AiFillPlusCircle, AiFillDelete} from 'react-icons/ai'
 import { BsPersonFill } from 'react-icons/bs'
 import {ImCancelCircle, ImCheckmark} from 'react-icons/im'
 import {FiMoreHorizontal} from 'react-icons/fi'
@@ -30,8 +30,8 @@ const Groups = ({clickHandle}) => {
     const AuthCon = useContext(AuthContext)
     const FriendlistCon = useContext(FriendlistContext)
 
-    const updateAddGroup = (e) => {
-        if (e.target.id === 'Groups_creator'){
+    const cancelAction = (e) => {
+        if (e.target.id === 'Background'){
             setPopupState(0)
         }
     }
@@ -97,15 +97,20 @@ const Groups = ({clickHandle}) => {
 
     const acceptAddUsers = async () => {
         setLoading(true)
+        const group_id = displayedGroup.group_id
         if (usersToAdd.length > 0){
             const {data} = await authFetchCon.authFetch.post('users/addUsersToGroup', {
                 members: usersToAdd,
-                group_id: displayedGroup.group_id
+                group_id: group_id
             })
             if (data.status === 0){
                 var result = await authFetchCon.authFetch.get('users/getGroups')
                 if (result.data.status === 0){
                     FriendlistCon.setGroups(result.data.result)
+                    comCon.socket.emit('add-user-to-group', usersToAdd)
+
+                    const updatedGroup = result.data.result.filter((group) => group.group_id === displayedGroup.group_id)
+                    setDisplayedGroup(updatedGroup[0])
                 }
             }
         }
@@ -141,6 +146,9 @@ const Groups = ({clickHandle}) => {
                 result = await authFetchCon.authFetch.get('users/getGroups')
                 if (result.data.status === 0){
                     FriendlistCon.setGroups(result.data.result)
+
+                    const updatedGroup = result.data.result.filter((group) => group.group_id === displayedGroup.group_id)
+                    setDisplayedGroup(updatedGroup[0])
                 }
             }
         }
@@ -151,10 +159,30 @@ const Groups = ({clickHandle}) => {
                 if (result.data.status === 0){
                     comCon.socket.emit('kick-user', user_id, displayedGroup.group_id)
                     FriendlistCon.setGroups(result.data.result)
+                    
+                    const updatedGroup = result.data.result.filter((group) => group.group_id === displayedGroup.group_id)
+                    setDisplayedGroup(updatedGroup[0])
                 }
             }
         }
         setConfirmLoading(false)
+    }
+
+    const deleteDisplayedGroup = async () => {
+        setLoading(true)
+        const group_id = displayedGroup.group_id
+        const {data} = await authFetchCon.authFetch.post('users/deleteGroup', {group_id: group_id})
+        if (data.status === 0){
+            const result = await authFetchCon.authFetch.get('users/getGroups')
+            if (result.data.status === 0){
+                FriendlistCon.setGroups(result.data.result)
+                comCon.socket.emit('group-delete', group_id)
+                setPopupState(0)
+                setDisplayGroupMenu(false)
+                setDisplayedGroup({})
+            }
+        }
+        setLoading(false)
     }
 
     const GroupMenu = () => {
@@ -177,8 +205,13 @@ const Groups = ({clickHandle}) => {
             })}
             {
             AuthCon.authState.userInfo.id === displayedGroup.ownerID &&
-            <div className='group-menu_add-member' onClick={() => setPopupState(2)}>
-                <HiUserAdd/>
+            <div className='group-menu_buttons'>
+                <div className='group-menu_add-member' onClick={() => setPopupState(2)}>
+                    <HiUserAdd/>
+                </div>
+                <div className='group-menu_delete-group' onClick={() => setPopupState(3)}>
+                    <AiFillDelete/>
+                </div>
             </div>
             }
             </div>
@@ -190,7 +223,7 @@ const Groups = ({clickHandle}) => {
     <div className='Groups_create'>
         <h3>Create new group</h3>
         <AiFillPlusCircle className='Groups_create-add' onClick={() => setPopupState(1)}/>
-        {popupState === 1 && <div id='Groups_creator' className='Groups_creator' onClick={(e) => updateAddGroup(e)}>
+        {popupState === 1 && <div id='Background' className='Groups_creator' onClick={(e) => cancelAction(e)}>
             <div className='Groups_creator-friendlist'>
             {FriendlistCon.friends.map((friend) => {
                 return <div key={friend.friendships_id} className={`Friendlist_main-friend ${groupMembers.includes(friend.friend_id) && 'friend-selected'}`} onClick={() => updateGroupMembers(friend.friend_id)}>
@@ -214,7 +247,7 @@ const Groups = ({clickHandle}) => {
             </div>
         </div>}
         
-        {(popupState === 2 && AuthCon.authState.userInfo.id === displayedGroup.ownerID) && <div id='Groups_creator' className='Groups_creator' onClick={(e) => updateAddGroup(e)}>
+        {(popupState === 2 && AuthCon.authState.userInfo.id === displayedGroup.ownerID) && <div id='Background' className='Groups_creator' onClick={(e) => cancelAction(e)}>
             <div className='Groups_creator-friendlist'>
             {FriendlistCon.friends.map((friend) => {
                 if (!displayedGroup.member_icons.map((icon) => {return icon.user_id}).includes(friend.friend_id)){
@@ -241,7 +274,21 @@ const Groups = ({clickHandle}) => {
                 </div>
             </div>
         </div>}
-        
+
+        {popupState === 3 && <div id='Background' className='Groups_creator' onClick={(e) => cancelAction(e)}>
+            <div className='group-delete'>
+                <h2>Are you sure you want to delete this group?</h2>
+                <div className='Groups_creator-controls_buttons'>
+                    <div className='Groups_creator-controls_buttons-cancel' onClick={() => setPopupState(0)}>
+                        <ImCancelCircle/>
+                    </div>
+                    <div className='Groups_creator-controls_buttons-accept' onClick={() => deleteDisplayedGroup()}>
+                        {loading? <Loading/> : <ImCheckmark/>}
+                    </div>
+                </div>
+            </div>
+        </div>}
+    
         </div>
         {FriendlistCon.groups.map((group) => {
                 return <React.Fragment key={group.group_id}><div id='change_group' className={`Friendlist_main-friend ${group.group_id === comCon.room && 'friend-selected'}`}
@@ -253,7 +300,7 @@ const Groups = ({clickHandle}) => {
                         </div>
                     </div>
                 </div>
-                {(displayGroupMenu && group === displayedGroup)&& <GroupMenu/>}
+                {(displayGroupMenu && group.group_id === displayedGroup.group_id) && <GroupMenu/>}
                 </React.Fragment>
             })}
     </>)
