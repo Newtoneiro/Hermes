@@ -59,7 +59,7 @@ const {
   const FriendshipRequest = require('./Models/friendship_request')
   const Message = require('./Models/message')
   const GroupMembership = require('./Models/group_membership')
-  const GroupInfo = require('./Models/group_info')
+  const GroupInfo = require('./Models/group_info');
   
   mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@hermes.bnfuz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, {useNewUrlParser: true}, () => {
     console.log('Connected to mongoDB')
@@ -354,12 +354,12 @@ app.post('/api/users/removeFromGroup', checkJwt, async (req, res) => {
   const {user_id, group_id} = req.body
   try {
     await GroupMembership.findOneAndDelete({group_id: group_id, user_id: user_id})
+    res.send({status: 0})
   }
   catch (err){
     console.log(err)
     res.send({status: -1})
   }
-  res.send({status: 0})
 })
 
 app.post('/api/users/addUsersToGroup', checkJwt, async (req, res) => {
@@ -377,6 +377,20 @@ app.post('/api/users/addUsersToGroup', checkJwt, async (req, res) => {
     res.send({status: 0})
   }
   catch (err) {
+    console.log(err)
+    res.send({status: -1})
+  }
+})
+
+app.post('/api/users/deleteGroup', checkJwt, async (req, res) => {
+  const {group_id} = req.body
+  try{
+    await GroupInfo.findOneAndDelete({group_id: group_id})
+    const count = await GroupMembership.deleteMany({group_id: group_id})
+    const count2 = await Message.deleteMany({room_id: group_id})
+    res.send({status: 0})
+  }
+  catch (err){
     console.log(err)
     res.send({status: -1})
   }
@@ -418,10 +432,21 @@ app.post('/api/messages/get', checkJwt, async (req, res) => {
 
 io.on("connection", socket => {
   socket.on('send-message', async (user_id, message, room) => {
-    const verify = await GroupMembership.findOne({group_id: room, user_id: user_id})
+    const isGroup = await GroupInfo.findOne({group_id: room})
+    console.log(isGroup)
+    var verify;
+    if (isGroup){
+      verify = await GroupMembership.findOne({group_id: room, user_id: user_id})
+      console.log(verify)
+    }
+    else{
+      verify = await Friendship.findOne({friendships_id: room})
+      console.log(verify)
+    }
+    
     if (verify){
       let id = uuid.v4();
-      
+  
       const encrypted_text = encryptMessage(message.text)
       
       const encrypted_message = new Message({
@@ -457,6 +482,12 @@ io.on("connection", socket => {
     socket.leave(room)
   })
 
+  socket.on("add-user-to-group", async (users_id) => {
+    await users_id.forEach((user_id) => {
+      io.in(user_id).emit("add-user-to-group-alert")
+    })
+  })
+
   socket.on("kick-user", async (user_id, group_id) => {
     try{
       await GroupMembership.findOneAndDelete({group_id : group_id, user_id: user_id}).then(() => {
@@ -466,5 +497,9 @@ io.on("connection", socket => {
     catch{
       console.log('something went wrong with kicking the user')
     }
+  })
+
+  socket.on("group-delete", async (group_id) => {
+    socket.in(group_id).emit("group-delete-alert", group_id)
   })
 })
