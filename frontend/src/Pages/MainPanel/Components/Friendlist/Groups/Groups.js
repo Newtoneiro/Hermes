@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {AiFillPlusCircle, AiFillDelete} from 'react-icons/ai'
 import { BsPersonFill } from 'react-icons/bs'
 import {ImCancelCircle, ImCheckmark} from 'react-icons/im'
@@ -29,6 +29,10 @@ const Groups = ({clickHandle}) => {
     const comCon = useContext(communicaitonContext)
     const AuthCon = useContext(AuthContext)
     const FriendlistCon = useContext(FriendlistContext)
+
+    useEffect(() => {
+        setDisplayedGroup((prev) => { return FriendlistCon.groups.find((group) => group.group_id === prev.group_id) || {} })
+    }, [FriendlistCon.groups])
 
     const cancelAction = (e) => {
         if (e.target.id === 'Background'){
@@ -88,10 +92,12 @@ const Groups = ({clickHandle}) => {
                 var result = await authFetchCon.authFetch.get('users/getGroups')
                 if (result.data.status === 0){
                     FriendlistCon.setGroups(result.data.result)
+
+                    comCon.socket.emit('add-user-to-group', groupMembers)
                 }
             }
+            cancelGroupCreation()
         }
-        cancelGroupCreation()
         setLoading(false)
     }
 
@@ -140,11 +146,13 @@ const Groups = ({clickHandle}) => {
     const updateGroupMember = async (user_id, action) => {
         setConfirmLoading(true)
         var result;
+        
         if (action === 1) {
             const {data} = await authFetchCon.authFetch.post('users/promoteGroup', {user_id: user_id, group_id: displayedGroup.group_id})
             if (data.status === 0){
                 result = await authFetchCon.authFetch.get('users/getGroups')
                 if (result.data.status === 0){
+                    comCon.socket.emit('promote-user', user_id, displayedGroup.group_id)
                     FriendlistCon.setGroups(result.data.result)
 
                     const updatedGroup = result.data.result.filter((group) => group.group_id === displayedGroup.group_id)
@@ -153,6 +161,13 @@ const Groups = ({clickHandle}) => {
             }
         }
         else if (action === 2) {
+            const message = {
+                alert: true,
+                text: `User ${displayedGroup.member_icons.find((member) => member.user_id === user_id).username} has been kicked from the group.`,
+                sender_id: AuthCon.authState.userInfo.id,
+            }
+            comCon.sendMessage(message, displayedGroup.group_id)
+
             const {data} = await authFetchCon.authFetch.post('users/removeFromGroup', {user_id: user_id, group_id: displayedGroup.group_id})
             if (data.status === 0){
                 result = await authFetchCon.authFetch.get('users/getGroups')
@@ -171,12 +186,21 @@ const Groups = ({clickHandle}) => {
     const deleteDisplayedGroup = async () => {
         setLoading(true)
         const group_id = displayedGroup.group_id
+        
+        const message = {
+                    alert: true,
+                    text: 'This group has been deleted',
+                    sender_id: AuthCon.authState.userInfo.id,
+                }
+        comCon.sendMessage(message, group_id)
+
         const {data} = await authFetchCon.authFetch.post('users/deleteGroup', {group_id: group_id})
         if (data.status === 0){
             const result = await authFetchCon.authFetch.get('users/getGroups')
             if (result.data.status === 0){
+                comCon.socket.emit('group-delete', displayedGroup.member_icons.map((member) => member.user_id), group_id)
                 FriendlistCon.setGroups(result.data.result)
-                comCon.socket.emit('group-delete', group_id)
+                
                 setPopupState(0)
                 setDisplayGroupMenu(false)
                 setDisplayedGroup({})

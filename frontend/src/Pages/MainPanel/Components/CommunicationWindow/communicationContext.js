@@ -14,7 +14,7 @@ const CommunicationProvider = ({children}) => {
     const [friendImage, setFriendImage] = useState([])
 
     const [allLoaded, setAllLoaded] = useState(false)
-    const [loadingLoading, setLoadingLoading] = useState(false)
+    const [loadingMoreMessages, setLoadingMoreMessages] = useState(false)
     const [displayScrollToBottom, setDisplayScrollToBottom] = useState(false)
 
     const dummy = useRef()
@@ -36,12 +36,9 @@ const CommunicationProvider = ({children}) => {
                             dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})
                         }
                     }, 300);
-                })
+            })
             
             new_socket.on('get-kicked', (group_id) => {
-                if (group_id === room){
-                    setMessages([...messages, {message_id: 'abc', text: 'You\'ve been kicked from this conversation'}])
-                }
                 FriendlistCon.setGroups(prev => {
                     return prev.filter((group) => group.group_id !== group_id)
                 })
@@ -49,16 +46,13 @@ const CommunicationProvider = ({children}) => {
             })
 
             new_socket.on('group-delete-alert', (group_id) => {
-                if (group_id === room){
-                    setMessages([...messages, {message_id: 'abc', text: 'This group has been deleted'}])
-                }
                 FriendlistCon.setGroups(prev => {
                     return prev.filter((group) => group.group_id !== group_id)
                 })
                 new_socket.emit('leave-room', group_id)
             })
 
-            new_socket.on('add-user-to-group-alert', () => {
+            new_socket.on('user-refresh-groups', () => {
                 FriendlistCon.loadGroups(false)
             })
 
@@ -67,7 +61,7 @@ const CommunicationProvider = ({children}) => {
         }
         
         createSocket()
-    }, [room])
+    }, [])
 
     useEffect(() => {
         setLoading(true)
@@ -110,16 +104,17 @@ const CommunicationProvider = ({children}) => {
         }
     }
 
-    const sendMessage = async (message) => {
-        await socket.emit('send-message', AuthCon.authState.userInfo.id, message, room)
+    const sendMessage = async (message, room_id) => {
+        var actual_room_id = (room_id || room)
+        await socket.emit('send-message', AuthCon.authState.userInfo.id, message, actual_room_id)
     }
 
     const handleScroll = async (e) => {
-        if (!allLoaded && !loadingLoading)
+        if (!allLoaded && !loadingMoreMessages)
         {
             if (loadMore.current.getBoundingClientRect().top >= e.target.getBoundingClientRect().top - 2)
             {
-                setLoadingLoading(true)
+                setLoadingMoreMessages(true)
                 if (messages.length > 0){
                     await authFetchCon.authFetch.post('messages/get', {
                             room: room,
@@ -137,7 +132,7 @@ const CommunicationProvider = ({children}) => {
                         }
                     })
                 }
-                setLoadingLoading(false)
+                setLoadingMoreMessages(false)
             }
         }
         if (document.getElementById('message-first') && document.getElementById('communication-main_messages'))
@@ -165,7 +160,7 @@ const CommunicationProvider = ({children}) => {
         setFriendImage,
         loadMore,
         handleScroll,
-        loadingLoading,
+        loadingMoreMessages,
         displayScrollToBottom
     }}>
         {children}

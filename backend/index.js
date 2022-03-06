@@ -160,9 +160,6 @@ app.post('/api/users/find', checkJwt, async (req, res) => {
         }
       ]
     })
-  // var response = await db.promise().query(`SELECT * FROM USERS WHERE username like '${text}%' and user_id != '${user_id}' and username not in
-  // (select username from friendships join users on (user1_id = user_id) where user2_id = '${user_id}') and username not in
-  // (select username from friendships join users on (user2_id = user_id) where user1_id = '${user_id}') ORDER BY username;`)
   const data = response.map(user => ({username: user.username, user_id: user.user_id}))
   data.sort((a, b) => a.username.localeCompare(b.username))
   res.send(data)
@@ -172,8 +169,6 @@ app.post('/api/users/sendFriendRequest', checkJwt, async (req, res) => {
   const {user_id} = req.body;
   const sender_id = req.user.id;
   var response = await FriendshipRequest.find({$or: [{$and: [{user1_id: sender_id}, {user2_id: user_id}]}, {$and: [{user2_id: sender_id}, {user1_id: user_id}]}]})
-  // var response = await db.promise().query(`SELECT * FROM friendships_requests WHERE (user1_id = '${sender_id}' and user2_id = '${user_id}')
-  // or (user1_id = '${user_id}' and user2_id = '${sender_id}');`)
   if (response.length === 0){
     let id = uuid.v4();
     const new_friendship_request = new FriendshipRequest({
@@ -181,6 +176,7 @@ app.post('/api/users/sendFriendRequest', checkJwt, async (req, res) => {
       user1_id: sender_id,
       user2_id: user_id,
     })
+
     new_friendship_request.save().then(() => {
       res.send({result: 0});
     })
@@ -198,7 +194,6 @@ app.get('/api/users/getRequests', checkJwt, async (req, res) => {
       const user = await User.findOne({user_id: request.user1_id})
       return {friendships_requests_id: request.friendships_requests_id, user1_id: request.user1_id, username: user.username}
     }))
-    // var response = await db.promise().query(`SELECT friendships_requests_id, user1_id, username FROM friendships_requests join users on (user1_id = user_id) WHERE (user2_id = '${user_id}')`)
     result.sort((a, b) => a.username.localeCompare(b.username))
     res.send({result: result, status: 0});
   }
@@ -211,7 +206,6 @@ app.get('/api/users/getRequests', checkJwt, async (req, res) => {
 app.post('/api/users/declineRequest', checkJwt, async(req, res) => {
   const {req_id} = req.body;
   try{
-    // await db.promise().query(`DELETE FROM friendships_requests WHERE friendships_requests_id = '${req_id}'`)
     FriendshipRequest.deleteOne({friendships_requests_id: req_id}, function(err){
       if (err){
         console.log('There was an error declining the request')
@@ -229,18 +223,15 @@ app.post('/api/users/declineRequest', checkJwt, async(req, res) => {
 app.post('/api/users/acceptRequest', checkJwt, async(req, res) => {
   const {req_id} = req.body;
   try{
-    // var request = await db.promise().query(`SELECT * FROM friendships_requests WHERE friendships_requests_id = '${req_id}'`)
     var request = await FriendshipRequest.findOne({friendships_requests_id: req_id})
     let id = uuid.v4();
 
-    // await db.promise().query(`INSERT INTO friendships (friendships_id, user1_id, user2_id) VALUES ('${id}', '${request[0][0].user1_id}', '${request[0][0].user2_id}')`)
     const new_friendship = new Friendship({
       friendships_id: id,
       user1_id: request.user1_id,
       user2_id: request.user2_id
     })
     new_friendship.save().then(() => {
-      // await db.promise().query(`DELETE FROM friendships_requests WHERE friendships_requests_id = '${req_id}'`)
       FriendshipRequest.deleteOne({friendships_requests_id: req_id}, function(err){
         if (err){
           console.log('There was an error removing the request')
@@ -259,15 +250,6 @@ app.post('/api/users/acceptRequest', checkJwt, async(req, res) => {
 app.get('/api/users/getFriends', checkJwt, async (req, res) => {
   const user_id = req.user.id;
   try{
-    // var response = await db.promise().query(`SELECT * FROM 
-    //                                             ((SELECT friendships_id, user2_id as friend_id, username 
-    //                                             FROM friendships join users on (user2_id = user_id)
-    //                                             WHERE (user1_id = '${user_id}'))
-    //                                          UNION
-    //                                             (SELECT friendships_id, user1_id as friend_id, username 
-    //                                             FROM friendships join users on (user1_id = user_id)
-    //                                             WHERE (user2_id = '${user_id}'))) combined
-    //                                           ORDER BY username`);
     var friends1 = await Friendship.find({
       user1_id: user_id,
     })
@@ -386,8 +368,8 @@ app.post('/api/users/deleteGroup', checkJwt, async (req, res) => {
   const {group_id} = req.body
   try{
     await GroupInfo.findOneAndDelete({group_id: group_id})
-    const count = await GroupMembership.deleteMany({group_id: group_id})
-    const count2 = await Message.deleteMany({room_id: group_id})
+    await GroupMembership.deleteMany({group_id: group_id})
+    await Message.deleteMany({room_id: group_id})
     res.send({status: 0})
   }
   catch (err){
@@ -451,7 +433,8 @@ io.on("connection", socket => {
         room_id: room,
         sender_id: message.sender_id,
         text: encrypted_text,
-        timestamp: Date.now().toString()
+        timestamp: Date.now().toString(),
+        alert: message.alert
       })
       
       const new_message = {
@@ -459,7 +442,8 @@ io.on("connection", socket => {
         room_id: room,
         sender_id: message.sender_id,
         text: message.text,
-        timestamp: Date.now().toString()
+        timestamp: Date.now().toString(),
+        alert: message.alert
       }
       
       await encrypted_message.save().then(() => {
@@ -481,8 +465,17 @@ io.on("connection", socket => {
 
   socket.on("add-user-to-group", async (users_id) => {
     await users_id.forEach((user_id) => {
-      io.in(user_id).emit("add-user-to-group-alert")
+      io.in(user_id).emit("user-refresh-groups")
     })
+  })
+
+  socket.on("promote-user", async (user_id, group_id) => {
+    try{
+      socket.in(group_id).emit("user-refresh-groups")
+    }
+    catch{
+      console.log('something went wrong with promoting the user')
+    }
   })
 
   socket.on("kick-user", async (user_id, group_id) => {
@@ -496,7 +489,9 @@ io.on("connection", socket => {
     }
   })
 
-  socket.on("group-delete", async (group_id) => {
-    socket.in(group_id).emit("group-delete-alert", group_id)
+  socket.on("group-delete", async (members, group_id) => {
+    members.forEach((member) => {
+      socket.in(member).emit("group-delete-alert", group_id)
+    })
   })
 })
