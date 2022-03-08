@@ -3,6 +3,7 @@ import { io } from "socket.io-client";
 import { AuthContext } from "../../../../AuthContext/Authcontext";
 import { FetchContext } from "../../../../Fetch/AuthFetchContext";
 import { FriendlistContext } from "../Friendlist/FriendlistContext";
+import { FriendRequestContext } from "../FriendRequests/FriendRequestsContext";
 
 const communicaitonContext = createContext()
 
@@ -23,6 +24,7 @@ const CommunicationProvider = ({children}) => {
     const authFetchCon = useContext(FetchContext)
     const AuthCon = useContext(AuthContext)
     const FriendlistCon = useContext(FriendlistContext)
+    const FriendReqCon = useContext(FriendRequestContext)
 
     useEffect(() => {
         async function createSocket(){
@@ -43,6 +45,9 @@ const CommunicationProvider = ({children}) => {
                     return prev.filter((group) => group.group_id !== group_id)
                 })
                 new_socket.emit('leave-room', group_id)
+                if (group_id === room){
+                    setRoom('')
+                }
             })
 
             new_socket.on('group-delete-alert', (group_id) => {
@@ -56,12 +61,16 @@ const CommunicationProvider = ({children}) => {
                 FriendlistCon.loadGroups(false)
             })
 
+            new_socket.on('receive-new-request', () => {
+                FriendReqCon.loadData()
+            })
+
             new_socket.emit('join-room', AuthCon.authState.userInfo.id)
             setSocket(new_socket)
         }
         
         createSocket()
-    }, [])
+    }, [room])
 
     useEffect(() => {
         setLoading(true)

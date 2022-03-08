@@ -3,19 +3,22 @@ import {AiOutlineSearch, AiOutlinePlus} from 'react-icons/ai'
 import {FaUserAlt} from 'react-icons/fa'
 import './addfriend.css'
 import { FetchContext } from '../../../../Fetch/AuthFetchContext';
+import { communicaitonContext } from '../CommunicationWindow/communicationContext';
 
 const AddFriend = () => {
     const [text, setText] = useState('')
     const [found, setFound] = useState([])
     const [message, setMessage] = useState('')
+    
     const AuthFetchCon = useContext(FetchContext)
+    const comCon = useContext(communicaitonContext)
 
     const getUsers = async () => {
-       const {data} = await AuthFetchCon.authFetch.post('users/find', 
-        {   
-            text: text, 
-        })
-        setFound(data)
+      const {data} = await AuthFetchCon.authFetch.post('users/find', 
+      {   
+          text: text, 
+      })
+      setFound(data)
     }
 
     const handleClick = async (user_id) => {
@@ -26,6 +29,7 @@ const AddFriend = () => {
       if (data.result === 0)
       {
         setMessage('Request send!')
+        comCon.socket.emit('new-request', user_id)
       }
       if (data.result === -1){
         setMessage('Pending request or already befriended')

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import { createContext, useContext, useState, useEffect, useCallback} from "react";
 import { FetchContext } from "../../../../Fetch/AuthFetchContext";
 
 const FriendlistContext = createContext()
@@ -11,7 +11,7 @@ const FriendlistProvider = ({children}) => {
     
     const AuthFetchCon = useContext(FetchContext)
 
-    const loadFriends = async (load) => {
+    const loadFriends = useCallback(async (load) => {
         if (load){
             setLoading(true)
         }
@@ -23,9 +23,9 @@ const FriendlistProvider = ({children}) => {
         if (load){
             setLoading(false)
         }
-    }
+    }, [AuthFetchCon.authFetch])
 
-    const loadGroups = async (load) => {
+    const loadGroups = useCallback(async (load) => {
         if (load){
             setLoading(true)
         }
@@ -37,7 +37,7 @@ const FriendlistProvider = ({children}) => {
         if (load){
             setLoading(false)
         }
-    }
+    }, [AuthFetchCon.authFetch])
 
     const loadData = async () => {
         setLoading(true)
@@ -50,11 +50,16 @@ const FriendlistProvider = ({children}) => {
     
     useEffect(() => {
         async function execute(){
-            await loadData()
+            setLoading(true)
+            
+            await loadFriends(false)
+            await loadGroups(false)
+
+            setLoading(false)
         }
 
         execute()
-    }, [AuthFetchCon.authFetch])
+    }, [loadFriends, loadGroups])
 
     return <FriendlistContext.Provider value={{
         friends,

@@ -494,4 +494,8 @@ io.on("connection", socket => {
       socket.in(member).emit("group-delete-alert", group_id)
     })
   })
+
+  socket.on("new-request", async (user_id) => {
+    socket.in(user_id).emit("receive-new-request")
+  })
 })

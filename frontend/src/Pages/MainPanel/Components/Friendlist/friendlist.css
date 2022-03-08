@@ -42,14 +42,19 @@
 
   background-color: var(--default-colour-13);
 
-  border-left: solid 1px black;
-  border-right: solid 1px black;
-
   cursor: pointer;
 
   flex-grow: 1;
 
   transition: 0.5s;
+}
+
+.Friendlist_choice-friends {
+  border-right: solid 1px black;
+}
+
+.Friendlist_choice-groups {
+  border-left: solid 1px black;
 }
 
 .Friendlist_choice-chosen {
@@ -140,6 +145,7 @@
   color: var(--default-colour-15);
 
   font-size: 21px;
+  background-color: var(--default-colour-10);
 }
 
 .Groups_create-add {
@@ -440,6 +446,25 @@
 
   background-color: var(--default-colour-12);
   text-align: center;
+}
+
+.friends_groups-reload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--default-colour-3);
+  font-size: 30px;
+  margin: 0.2em 0;
+
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.friends_groups-reload:hover {
+  color: var(--default-colour-2);
+  transform: rotate(145deg);
+  transition: 0.5s;
 }
 
 @media screen and (max-width: 900px) {
