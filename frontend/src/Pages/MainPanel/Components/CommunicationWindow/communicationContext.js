@@ -129,12 +129,12 @@ const CommunicationProvider = ({children}) => {
                             room: room,
                             timestamp: messages[0].timestamp,
                     }).then(({data}) => {
-                        var last_message = document.getElementById('message-last')
+                        const last_message = document.getElementById('message-last')
                         
                         var messages_reverse = data.result.reverse()
                         messages_reverse = messages_reverse.concat(messages)
                         setMessages(messages_reverse)
-                        
+
                         last_message.scrollIntoView({block: "start", inline: "end"})
                         if (data.allLoaded){
                             setAllLoaded(true)

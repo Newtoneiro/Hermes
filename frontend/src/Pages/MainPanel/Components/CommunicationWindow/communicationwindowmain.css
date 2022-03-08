@@ -8,6 +8,7 @@
 
   background: var(--default-colour-10);
 
+  color: var(--default-colour-15);
   font-family: var(--font-family);
   letter-spacing: 2px;
 

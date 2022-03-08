@@ -27,7 +27,7 @@ const CommunicationWindowMain = () => {
   const Message = ({mess}) => {
     const sender_image = (comCon.friendImage.find((friend) => friend.user_id === mess.sender_id) || {image: ''})
     if (!mess.alert){
-      return <div id={mess.message_id === comCon.messages[0].message_id ? 'message-last' : (mess.message_id === comCon.messages[comCon.messages.length - 1].message_id ? 'message-first' : 'message')} className={`message-box ${mess.sender_id === AuthCon.authState.userInfo.id && 'sender'}`}>
+      return <div className={`message-box ${mess.sender_id === AuthCon.authState.userInfo.id && 'sender'}`}>
           <div className='message'>
             <h2>{mess.text}</h2>
           </div>
@@ -39,7 +39,7 @@ const CommunicationWindowMain = () => {
         </div>
     }
     else{
-      return <div id={mess.message_id === comCon.messages[0].message_id ? 'message-last' : (mess.message_id === comCon.messages[comCon.messages.length - 1].message_id ? 'message-first' : 'message')} className='message-box'>
+      return <div className='message-box'>
         <div className='message-alert'>
             <h2>{mess.text}</h2>
           </div>
@@ -55,12 +55,14 @@ const CommunicationWindowMain = () => {
             </div>
             {comCon.loading? <div className='communication-main_loading'><Loading className='loading'/></div> :
             comCon.messages.map((mess) => {
-              return <Message mess={mess} key={mess.message_id}/>
+              return <div key={mess.message_id} id={mess.message_id === comCon.messages[0].message_id ? 'message-last' : (mess.message_id === comCon.messages[comCon.messages.length - 1].message_id ? 'message-first' : 'message')}>
+                <Message mess={mess}/>
+              </div>
             })}
           <div ref={comCon.dummy}></div>
         </div>
         <form className='communication-main_send' onSubmit={(e) => handleSubmit(e)}>
-          {comCon.displayScrollToBottom && <div className='messages-scroll_to_bottom' onClick={() => {comCon.dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})}}><AiOutlineDownCircle/></div>}
+          {comCon.displayScrollToBottom && <div className='messages-scroll_to_bottom' onClick={() => comCon.dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})}><AiOutlineDownCircle/></div>}
           <input type='text' className='communication-main-input' value={text} onChange={(e) => setText(e.target.value)} maxLength={200}></input>
           <button type='submit' className='communication-main-button' onClick={(e) => handleSubmit(e)}>Send</button>
         </form>
