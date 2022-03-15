@@ -6,6 +6,7 @@ const FriendlistContext = createContext()
 const FriendlistProvider = ({children}) => {
     const [friends, setFriends] = useState([])
     const [groups, setGroups] = useState([])
+    const [notifications, setNotifications] = useState([])
     const [loading, setLoading] = useState(false)
     const [friendsgroups, setFriendsgroups] = useState(0)
     
@@ -39,14 +40,19 @@ const FriendlistProvider = ({children}) => {
         }
     }, [AuthFetchCon.authFetch])
 
-    const loadData = async () => {
-        setLoading(true)
-            
-        await loadFriends(false)
-        await loadGroups(false)
-
-        setLoading(false)
-    }
+    const loadNotifications = useCallback(async (load) => {
+        if (load){
+            setLoading(true)
+        }
+        await AuthFetchCon.authFetch.get('users/notifications').then(({data}) => {
+            if (data.status === 0){
+                setNotifications(data.result)
+            }
+        })
+        if (load){
+            setLoading(false)
+        }
+    }, [AuthFetchCon.authFetch])
     
     useEffect(() => {
         async function execute(){
@@ -54,6 +60,7 @@ const FriendlistProvider = ({children}) => {
             
             await loadFriends(false)
             await loadGroups(false)
+            await loadNotifications(false)
 
             setLoading(false)
         }
@@ -64,11 +71,12 @@ const FriendlistProvider = ({children}) => {
     return <FriendlistContext.Provider value={{
         friends,
         groups,
+        notifications,
+        setNotifications,
         setGroups,
         loading,
         friendsgroups,
         setFriendsgroups,
-        loadData,
         loadFriends,
         loadGroups
     }}>

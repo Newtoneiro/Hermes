@@ -467,6 +467,28 @@
   transition: 0.5s;
 }
 
+.Friendlistmain-notification {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 90%;
+
+  border-radius: 50%;
+
+  background-color: var(--default-colour-3);
+}
+
+.Group-notification {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 80%;
+
+  border-radius: 50%;
+
+  background-color: var(--default-colour-3);
+}
+
 @media screen and (max-width: 900px) {
   .Groups_creator-friendlist {
     width: 75%;
@@ -493,5 +515,13 @@
 @media screen and (max-width: 550px) {
   .group-menu_members-member h2 {
     font-size: 15px;
+  }
+
+  .Friendlistmain-notification {
+    left: 85%;
+  }
+
+  .Group-notification {
+    left: 75%;
   }
 }

@@ -9,7 +9,8 @@ const communicaitonContext = createContext()
 
 const CommunicationProvider = ({children}) => {
     const [room, setRoom] = useState('')
-    const [socket, setSocket] = useState({id: 0})
+    const [socket, setSocket] = useState('')
+
     const [messages, setMessages] = useState([])
     const [loading, setLoading] = useState(false)
     const [friendImage, setFriendImage] = useState([])
@@ -27,51 +28,71 @@ const CommunicationProvider = ({children}) => {
     const FriendReqCon = useContext(FriendRequestContext)
 
     useEffect(() => {
-        async function createSocket(){
-            const new_socket = io("/")
-            new_socket.on('receive-message', message => {
-                    setMessages((old) => {
-                        return [...old, message]
-                    })
-                    setTimeout(() => {
-                        if (dummy){
-                            dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})
-                        }
-                    }, 300);
+        var new_socket = io("/")
+        new_socket.emit('join-room', AuthCon.authState.userInfo.id)
+
+        new_socket.on('receive-message', message => {
+            setMessages((old) => {
+                return [...old, message]
             })
-            
-            new_socket.on('get-kicked', (group_id) => {
-                FriendlistCon.setGroups(prev => {
-                    return prev.filter((group) => group.group_id !== group_id)
-                })
-                new_socket.emit('leave-room', group_id)
-                if (group_id === room){
-                    setRoom('')
+            setTimeout(() => {
+                if (dummy){
+                    dummy.current.scrollIntoView({behavior: "smooth", block: "start", inline: "end"})
                 }
-            })
-
-            new_socket.on('group-delete-alert', (group_id) => {
-                FriendlistCon.setGroups(prev => {
-                    return prev.filter((group) => group.group_id !== group_id)
-                })
-                new_socket.emit('leave-room', group_id)
-            })
-
-            new_socket.on('user-refresh-groups', () => {
-                FriendlistCon.loadGroups(false)
-            })
-
-            new_socket.on('receive-new-request', () => {
-                FriendReqCon.loadData()
-            })
-
-            new_socket.emit('join-room', AuthCon.authState.userInfo.id)
-            setSocket(new_socket)
-        }
+            }, 300);
+        })
         
-        createSocket()
-    }, [room])
+        new_socket.on('group-delete-alert', (group_id) => {
+            FriendlistCon.setGroups(prev => {
+                return prev.filter((group) => group.group_id !== group_id)
+            })
+            socket.emit('leave-room', group_id)
+        })
 
+        new_socket.on('user-refresh-groups', () => {
+            FriendlistCon.loadGroups(false)
+        })
+
+        new_socket.on('receive-new-request', () => {
+            FriendReqCon.loadData()
+        })
+        
+        new_socket.on('add_notification', (notification) => {
+            var room_id;
+            setRoom((room) => {
+                room_id = room
+                return room
+            })
+            // If users connected to the same room, dont send notification
+            if (room_id !== notification){
+                FriendlistCon.setNotifications((notifications) => {return [...notifications, notification]})
+            }
+            else{
+                new_socket.emit('clear-notifications', room_id, AuthCon.authState.userInfo.id)
+            }
+        })
+
+        setSocket(new_socket)
+    }, [])
+
+    useEffect(() => {
+        if (room){
+            async function createSocket(){    
+                socket.on('get-kicked', (group_id) => {
+                    FriendlistCon.setGroups(prev => {
+                        return prev.filter((group) => group.group_id !== group_id)
+                    })
+                    socket.emit('leave-room', group_id)
+                    if (group_id === room){
+                        setRoom('')
+                    }
+                })
+            }
+            
+            createSocket()
+        }
+    }, [room, socket, FriendlistCon])
+        
     useEffect(() => {
         setLoading(true)
         if (room){
@@ -85,18 +106,19 @@ const CommunicationProvider = ({children}) => {
                             setAllLoaded(true)
                         }
                         if (dummy.current){
+                            setLoading(false)
                             dummy.current.scrollIntoView({behavior: "auto", block: "start", inline: "end"})
                         }
                         setAllLoaded(false)
                     }
                     else{
                         console.log('There was an error loading messages')
+                        setLoading(false)
                     }
                 })
             }
         
-        fetchMessages()
-        setLoading(false)
+            fetchMessages()
         }
     
     }, [room, authFetchCon.authFetch])
@@ -105,6 +127,9 @@ const CommunicationProvider = ({children}) => {
         if (room !== new_room){
             socket.emit('leave-room', room)
             socket.emit('join-room', new_room)
+            
+            socket.emit('clear-notifications', new_room, AuthCon.authState.userInfo.id)
+            FriendlistCon.setNotifications((notifications) => {return notifications.filter((not) => not !== new_room)})
             
             setMessages([])
             setRoom(new_room)
@@ -135,7 +160,9 @@ const CommunicationProvider = ({children}) => {
                         messages_reverse = messages_reverse.concat(messages)
                         setMessages(messages_reverse)
 
-                        last_message.scrollIntoView({block: "start", inline: "end"})
+                        if (last_message){
+                            last_message.scrollIntoView({block: "start", inline: "end"})
+                        }
                         if (data.allLoaded){
                             setAllLoaded(true)
                         }

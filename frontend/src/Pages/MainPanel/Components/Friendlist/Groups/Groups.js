@@ -140,6 +140,7 @@ const Groups = ({clickHandle}) => {
                     onClick={(e) => handleGroupChange(e, group.group_id, group.member_icons)}>
                     <div id='change_group' className='Friendlist_main-friend_username'>
                         <h3 id='change_group'>{group.name}</h3>
+                        {FriendlistCon.notifications.includes(group.group_id) && <div className='Group-notification'></div>}
                         <div onClick={() => GroupsCon.updateGroupMenu(group, true)} className={`group-more ${(GroupsCon.displayGroupMenu && GroupsCon.displayedGroup === group) && 'group-more_clicked'}`}>
                             <FiMoreHorizontal id='group-more'/>
                         </div>

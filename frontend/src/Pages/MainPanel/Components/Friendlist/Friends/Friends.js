@@ -20,6 +20,7 @@ const Friends = ({clickHandle}) => {
                     {friend.image !== '' ? <img className='Friendlist_main-friend_image' src={friend.image} alt='friend-pic'/> : <BsPersonFill className='Friendlist_main-friend_image'/>}
                     <div className='Friendlist_main-friend_username'>
                         <h3>{friend.username}</h3>
+                        {FriendlistCon.notifications.includes(friend.friendships_id) && <div className='Friendlistmain-notification'></div>}
                     </div>
                 </div>
             })}

@@ -43,6 +43,7 @@ server.listen(PORT, () => {
     console.log('Server listenig on port' + PORT);
 })
 
+
 const {
   createToken,
   requireAdmin,
@@ -60,6 +61,7 @@ const {
   const Message = require('./Models/message')
   const GroupMembership = require('./Models/group_membership')
   const GroupInfo = require('./Models/group_info');
+  const Nofification = require('./Models/notification');
   
   mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@hermes.bnfuz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, {useNewUrlParser: true}, () => {
     console.log('Connected to mongoDB')
@@ -264,9 +266,23 @@ app.get('/api/users/getFriends', checkJwt, async (req, res) => {
       var user = await User.findOne({user_id: friend.user1_id})
       return {friendships_id: friend.friendships_id, friend_id: friend.user1_id, username: user.username, image: user.image}
     }))
+    
     var result = friends1.concat(friends2)
     result.sort((a, b) => a.username.localeCompare(b.username))
     res.send({result: result, status: 0});
+  }
+  catch (err){
+    console.log(err)
+    res.send({status: -1})
+  }
+})
+
+app.get('/api/users/notifications', checkJwt, async (req, res) => {
+  const user_id = req.user.id;
+  try{
+    var notifications = await Nofification.find({user_id: user_id})
+    notifications = notifications.map((not) => not.room_id)
+    res.send({result: notifications, status: 0})
   }
   catch (err){
     console.log(err)
@@ -416,11 +432,22 @@ io.on("connection", socket => {
   socket.on('send-message', async (user_id, message, room) => {
     const isGroup = await GroupInfo.findOne({group_id: room})
     var verify;
+    var users_to_notify;
     if (isGroup){
       verify = await GroupMembership.findOne({group_id: room, user_id: user_id})
+      users_to_notify = await GroupMembership.find({group_id: room})
+      users_to_notify = users_to_notify.filter((user) => user.user_id !== user_id).map((user) => user.user_id)
     }
     else{
       verify = await Friendship.findOne({friendships_id: room})
+      users_to_notify = [verify].map((user) => {
+        if (user.user1_id === user_id){
+          return user.user2_id;
+        }
+        else{
+          return user.user1_id;
+        }
+      })
     }
     
     if (verify){
@@ -448,6 +475,21 @@ io.on("connection", socket => {
       
       await encrypted_message.save().then(() => {
         io.in(room).emit("receive-message", new_message)
+        
+        users_to_notify.forEach(async (user) => {
+            const already_notified = await Nofification.findOne({room_id: room, user_id: user})
+            if (!already_notified){
+              const notification = new Nofification({
+                notification_id: uuid.v4(),
+                user_id: user,
+                room_id: room,
+              })
+
+              notification.save()
+              console.log('notifying user: ' + user)
+              io.in(user).emit('add_notification', room)
+            }
+          })
       })
     }
     else{
@@ -497,5 +539,9 @@ io.on("connection", socket => {
 
   socket.on("new-request", async (user_id) => {
     socket.in(user_id).emit("receive-new-request")
+  })
+
+  socket.on("clear-notifications", async (room, user_id) => {
+    await Nofification.findOneAndDelete({room_id: room, user_id: user_id})
   })
 })
