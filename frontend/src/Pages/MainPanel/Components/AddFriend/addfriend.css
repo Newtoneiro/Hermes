@@ -5,12 +5,17 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  font-family: var(--font-family);
+}
+
+.addfriend_input-box-header {
+  color: var(--default-colour-15);
 }
 
 .addfriend_input-box {
-  width: 100%;
+  width: 80%;
   height: 2.5em;
-  margin-top: 0.4em;
   display: flex;
   align-items: center;
   justify-content: center;

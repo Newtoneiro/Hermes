@@ -60,6 +60,7 @@
 .Sidepanel_navbar-button {
   width: 60px;
   height: 60px;
+  position: relative;
 
   display: flex;
   align-items: center;
@@ -118,6 +119,18 @@
   z-index: 1;
 }
 
+.sidepanel-notification_dot {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  top: -10%;
+  left: 65%;
+  position: absolute;
+
+  background-color: var(--default-colour-1);
+  animation: fade-in 0.4s ease-out;
+}
+
 @media screen and (max-width: 900px) {
   .Sidepanel_main {
     width: 100px;
@@ -147,6 +160,13 @@
 
   .Sidepanel_navbar-button {
     margin: 0.4em 0;
+  }
+
+  .sidepanel-notification_dot {
+    width: 20px;
+    height: 20px;
+    top: -10%;
+    left: 60%;
   }
 }
 

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import {AiOutlineSearch, AiOutlinePlus} from 'react-icons/ai'
-import {FaUserAlt} from 'react-icons/fa'
+import {BsPersonFill} from 'react-icons/bs'
 import './addfriend.css'
 import { FetchContext } from '../../../../Fetch/AuthFetchContext';
 import { communicaitonContext } from '../CommunicationWindow/communicationContext';
@@ -14,11 +14,13 @@ const AddFriend = () => {
     const comCon = useContext(communicaitonContext)
 
     const getUsers = async () => {
-      const {data} = await AuthFetchCon.authFetch.post('users/find', 
-      {   
-          text: text, 
-      })
-      setFound(data)
+      if (text !== ''){
+        const {data} = await AuthFetchCon.authFetch.post('users/find', 
+        {   
+            text: text, 
+        })
+        setFound(data)
+      }
     }
 
     const handleClick = async (user_id) => {
@@ -37,6 +39,7 @@ const AddFriend = () => {
     }
 
   return <div className='addfriend_main'>
+        <h1 className='addfriend_input-box-header'>Search for friends:</h1>
       <div className='addfriend_input-box'>
         <input className='addfriend_input-box-input' type='text' value={text} onChange={(e) => setText(e.target.value)} placeholder='Search'></input>
         <button className='addfriend_input-box-button' onClick={() => getUsers()}><AiOutlineSearch/></button>
@@ -47,7 +50,7 @@ const AddFriend = () => {
       <div className='addfriend_userlist'>
         {found.map((user) => {
             return <div className='addfriend_userlist-user' key={user.user_id}>
-                <FaUserAlt className='addfriend_userlist-user-profile'/>
+                {user.image !== '' ? <img className='Friendlist_main-friend_image' src={user.image} alt='friend-pic'/> : <BsPersonFill className='Friendlist_main-friend_image'/>}
                 <h2>{user.username}</h2>
                 <AiOutlinePlus onClick={() => handleClick(user.user_id)} className='addfriend_userlist-user-add'/>
             </div>

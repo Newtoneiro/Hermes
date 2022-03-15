@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   BsFillPersonPlusFill,
   BsFillPersonLinesFill,
@@ -10,10 +10,15 @@ import AddFriend from "../AddFriend/AddFriend";
 import FriendRequests from "../FriendRequests/FriendRequests";
 import Friendlist from "../Friendlist/Friendlist";
 import Profile from "../Profile/Profile";
+import { FriendRequestContext } from "../FriendRequests/FriendRequestsContext";
+import { FriendlistContext } from "../Friendlist/FriendlistContext";
 
 const Sidepanel = () => {
   const [state, setState] = useState(0);
   const [hideAnimation, setHideAnimation] = useState(false)
+
+  const FriendReqCon = useContext(FriendRequestContext)
+  const FriendlistCon = useContext(FriendlistContext)
 
   const hidePanel = () => {
     setHideAnimation(true)
@@ -46,6 +51,7 @@ const Sidepanel = () => {
             onClick={() => updateState(1)}
           >
             <BsFillPersonLinesFill />
+            {FriendlistCon.notifications.length !== 0 && <div className="sidepanel-notification_dot"></div>}
           </div>
           <div
             className={`Sidepanel_navbar-button ${state === 2 && "selected"}`}
@@ -58,6 +64,7 @@ const Sidepanel = () => {
             onClick={() => updateState(3)}
           >
             <BsFillEnvelopeFill />
+            {FriendReqCon.requests.length !== 0 && <div className="sidepanel-notification_dot"></div>}
           </div>
           
           <div className="Sidepanel_navbar-footer" />

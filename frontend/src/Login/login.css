@@ -7,7 +7,7 @@
   }
 }
 
-.Login_main {
+.Form_main {
   width: 400px;
   height: auto;
   display: flex;
@@ -26,7 +26,7 @@
   animation: slide_in 0.5s;
 }
 
-.Login_main-header {
+.Form_main-header {
   background-color: var(--default-colour-10);
   width: 100%;
   text-align: center;
@@ -35,7 +35,7 @@
   flex-grow: 1;
 }
 
-.Login_main-form {
+.Form_main-form {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -45,7 +45,7 @@
   font-size: 13px;
 }
 
-.Login_main-input_box {
+.Form_main-input_box {
   padding: 1em 2em 0;
   display: flex;
   flex-direction: column;
@@ -53,11 +53,11 @@
   justify-content: flex-start;
 }
 
-.Login_main-input_box label {
+.Form_main-input_box label {
   transition: 0.5s;
 }
 
-.Login_main-input_box input {
+.Form_main-input_box input {
   appearance: none;
   -webkit-appearance: none;
   -ms-appearance: none;
@@ -73,23 +73,23 @@
   transition: 0.5s;
 }
 
-.Login_main-input_box p {
+.Form_main-input_box p {
   text-align: center;
   height: 0.1em;
   width: 100%;
 }
 
-.Login_main-input_box-incorrect input {
+.Form_main-input_box-incorrect input {
   border-color: var(--default-colour-20);
   transition: 0.5s;
 }
 
-.Login_main-input_box-incorrect label {
+.Form_main-input_box-incorrect label {
   color: var(--default-colour-20);
   transition: 0.5s;
 }
 
-.Login_main-submit {
+.Form_main-submit {
   margin-top: 1em;
   padding: 0 1.5em;
   margin-bottom: 1em;
@@ -97,7 +97,7 @@
   height: 100%;
 }
 
-.Login_main-submit button {
+.Form_main-submit button {
   width: 100%;
   height: 40px;
   border: none;
@@ -111,13 +111,13 @@
   transition: 0.5s;
 }
 
-.Login_main-submit button:hover {
+.Form_main-submit button:hover {
   transform: scale(1.02);
   background: var(--default-colour-1);
   transition: 0.5s;
 }
 
-.Login_main-register {
+.Form_main-register {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -127,11 +127,11 @@
   background-color: var(--default-colout-6);
 }
 
-.Login_main-register h3 {
+.Form_main-register h3 {
   font-size: 15px;
 }
 
-.Login_main-register a {
+.Form_main-register a {
   font-weight: 900;
   font-size: 20px;
   text-decoration: none;
@@ -139,15 +139,15 @@
 }
 
 @media screen and (max-width: 500px) {
-  .Login_main {
+  .Form_main {
     width: 85%;
   }
 
-  .Login_main-register h3 {
+  .Form_main-register h3 {
     font-size: 12px;
   }
 
-  .Login_main-register a {
+  .Form_main-register a {
     font-size: 15px;
   }
 }

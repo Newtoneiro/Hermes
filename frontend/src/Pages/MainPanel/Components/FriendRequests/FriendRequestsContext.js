@@ -23,7 +23,6 @@ const FriendRequestProvider = ({children}) => {
             await loadData()
             setLoading(false)
         }
-        
         execute()
     }, [loadData])
 

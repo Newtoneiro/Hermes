@@ -26,7 +26,8 @@ const csrfProtection = csrf({
             key: '_csrf',
             httpOnly: true,
             secure: true,
-            sameSite: 'none',
+            path: '/',
+            sameSite: 'lax',
           }
 });
 app.use(csrfProtection);
@@ -117,7 +118,8 @@ app.post('/api/users/verify', async (req, res) => {
 
       res.cookie('token', token, {
         httpOnly: true,
-        sameSite: 'none',
+        path: '/',
+        sameSite: 'lax',
         secure: true,
       })
 
@@ -162,7 +164,7 @@ app.post('/api/users/find', checkJwt, async (req, res) => {
         }
       ]
     })
-  const data = response.map(user => ({username: user.username, user_id: user.user_id}))
+  const data = response.map(user => ({username: user.username, user_id: user.user_id, image: user.image}))
   data.sort((a, b) => a.username.localeCompare(b.username))
   res.send(data)
 })
@@ -486,7 +488,6 @@ io.on("connection", socket => {
               })
 
               notification.save()
-              console.log('notifying user: ' + user)
               io.in(user).emit('add_notification', room)
             }
           })

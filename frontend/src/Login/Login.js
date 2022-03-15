@@ -20,26 +20,26 @@ const Login = () => {
 
     return <>
         {LoginCon.redirectOnLogin && <Redirect to='/'/>}
-        <div className='Login_main'>
-            <div className='Login_main-header'>
+        <div className='Form_main'>
+            <div className='Form_main-header'>
                 <h1>Login to Hermes</h1>
             </div>
-            <form className='Login_main-form'>
-                <div className={`Login_main-input_box ${LoginCon.inputs[0] && 'Login_main-input_box-incorrect'}`}>
+            <form className='Form_main-form'>
+                <div className={`Form_main-input_box ${LoginCon.inputs[0] && 'Form_main-input_box-incorrect'}`}>
                     <label htmlFor='username'>Username</label>
                     <input id='username' type='text' value={LoginCon.crudentials.username} onChange={(e) => LoginCon.dispatch({type: 'set_username', payload: e.target.value})}></input>
                     <p>{LoginCon.message.username}</p>
                 </div>
-                <div className={`Login_main-input_box ${LoginCon.inputs[1] && 'Login_main-input_box-incorrect'}`}>
+                <div className={`Form_main-input_box ${LoginCon.inputs[1] && 'Form_main-input_box-incorrect'}`}>
                     <label htmlFor='password'>Password</label>
                     <input id='password' type='password' value={LoginCon.crudentials.password} onChange={(e) => LoginCon.dispatch({type: 'set_password', payload: e.target.value})}></input>
                     <p>{LoginCon.message.password}</p>
                 </div>
-                <div className='Login_main-submit'>
+                <div className='Form_main-submit'>
                     <button type='submit' onClick={(e) => handleSubmit(e)}>{LoginCon.loading?<Loading/>:'Login'}</button>
                 </div>
             </form>
-            <div className='Login_main-register'>
+            <div className='Form_main-register'>
                 <h3>Don't have an account yet?</h3>
                 <Link to="/register">Sign up</Link>
             </div>

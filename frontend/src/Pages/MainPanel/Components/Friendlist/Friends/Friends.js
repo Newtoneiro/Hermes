@@ -8,12 +8,13 @@ const Friends = ({clickHandle}) => {
     const comCon = useContext(communicaitonContext)
     const FriendlistCon = useContext(FriendlistContext)
 
-  return (FriendlistCon.friends.length === 0 ?
-            <h2>No friends yet!</h2>:
-            <>
+  return (  <>
             <div className='friends_groups-reload' onClick={() => FriendlistCon.loadFriends(true)}>
                 <IoReloadCircleSharp/>
             </div>
+            {FriendlistCon.friends.length === 0 ?
+            <h2>No friends yet!</h2>:
+            <>
             {FriendlistCon.friends.map((friend) => {
                 return <div key={friend.friendships_id} className={`Friendlist_main-friend ${friend.friendships_id === comCon.room && 'friend-selected'}`}
                         onClick={() => clickHandle(friend.friendships_id, [{user_id: friend.friend_id, image: friend.image}])}>
@@ -24,7 +25,8 @@ const Friends = ({clickHandle}) => {
                     </div>
                 </div>
             })}
-            </>
+            </>}
+        </>
   )
 }
 
