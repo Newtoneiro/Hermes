@@ -127,6 +127,12 @@
   left: 65%;
   position: absolute;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--message-font-family);
+  font-weight: bolder;
+
   background-color: var(--default-colour-1);
   animation: fade-in 0.4s ease-out;
 }

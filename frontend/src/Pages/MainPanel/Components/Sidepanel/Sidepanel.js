@@ -51,7 +51,7 @@ const Sidepanel = () => {
             onClick={() => updateState(1)}
           >
             <BsFillPersonLinesFill />
-            {FriendlistCon.notifications.length !== 0 && <div className="sidepanel-notification_dot"></div>}
+            {FriendlistCon.notifications.length !== 0 && <div className="sidepanel-notification_dot"><h4>{FriendlistCon.notifications.length > 10 ? '10+' : FriendlistCon.notifications.length}</h4></div>}
           </div>
           <div
             className={`Sidepanel_navbar-button ${state === 2 && "selected"}`}
@@ -64,7 +64,7 @@ const Sidepanel = () => {
             onClick={() => updateState(3)}
           >
             <BsFillEnvelopeFill />
-            {FriendReqCon.requests.length !== 0 && <div className="sidepanel-notification_dot"></div>}
+            {FriendReqCon.requests.length !== 0 && <div className="sidepanel-notification_dot"><h4>{FriendReqCon.requests.length > 10 ? '10+' : FriendReqCon.requests.length}</h4></div>}
           </div>
           
           <div className="Sidepanel_navbar-footer" />

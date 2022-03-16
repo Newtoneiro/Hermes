@@ -34,8 +34,7 @@ const FetchProvider = ({ children }) => {
   );
 
   return (
-    <Provider
-      value={{
+    <Provider value={{
         authFetch
       }}
     >

@@ -26,8 +26,7 @@ const csrfProtection = csrf({
             key: '_csrf',
             httpOnly: true,
             secure: true,
-            path: '/',
-            sameSite: 'lax',
+            sameSite: 'none',
           }
 });
 app.use(csrfProtection);
@@ -118,8 +117,7 @@ app.post('/api/users/verify', async (req, res) => {
 
       res.cookie('token', token, {
         httpOnly: true,
-        path: '/',
-        sameSite: 'lax',
+        sameSite: 'none',
         secure: true,
       })
 
