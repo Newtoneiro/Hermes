@@ -13,7 +13,7 @@ const Friendlist = ({hidePanel}) => {
 
     const handleClick = (room, img) => {
         comCon.joinRoom(room)
-        comCon.setFriendImage(img)
+        comCon.setReceiversInfo(img)
         if (window.screen.width <= 900){
             hidePanel()
         }

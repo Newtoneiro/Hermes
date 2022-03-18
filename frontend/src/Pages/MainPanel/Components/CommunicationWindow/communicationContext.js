@@ -13,7 +13,7 @@ const CommunicationProvider = ({children}) => {
 
     const [messages, setMessages] = useState([])
     const [loading, setLoading] = useState(false)
-    const [friendImage, setFriendImage] = useState([])
+    const [receiversInfo, setReceiversInfo] = useState([])
 
     const [allLoaded, setAllLoaded] = useState(false)
     const [loadingMoreMessages, setLoadingMoreMessages] = useState(false)
@@ -45,6 +45,9 @@ const CommunicationProvider = ({children}) => {
         new_socket.on('group-delete-alert', (group_id) => {
             FriendlistCon.setGroups(prev => {
                 return prev.filter((group) => group.group_id !== group_id)
+            })
+            FriendlistCon.setNotifications(prev => {
+                return prev.filter((notif) => notif !== group_id)
             })
             socket.emit('leave-room', group_id)
         })
@@ -192,8 +195,8 @@ const CommunicationProvider = ({children}) => {
         messages,
         loading,
         dummy,
-        friendImage,
-        setFriendImage,
+        receiversInfo,
+        setReceiversInfo,
         loadMore,
         handleScroll,
         loadingMoreMessages,

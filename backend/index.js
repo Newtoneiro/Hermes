@@ -61,7 +61,7 @@ const {
   const Message = require('./Models/message')
   const GroupMembership = require('./Models/group_membership')
   const GroupInfo = require('./Models/group_info');
-  const Nofification = require('./Models/notification');
+  const Notification = require('./Models/notification');
   
   mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@hermes.bnfuz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, {useNewUrlParser: true}, () => {
     console.log('Connected to mongoDB')
@@ -280,7 +280,7 @@ app.get('/api/users/getFriends', checkJwt, async (req, res) => {
 app.get('/api/users/notifications', checkJwt, async (req, res) => {
   const user_id = req.user.id;
   try{
-    var notifications = await Nofification.find({user_id: user_id})
+    var notifications = await Notification.find({user_id: user_id})
     notifications = notifications.map((not) => not.room_id)
     res.send({result: notifications, status: 0})
   }
@@ -352,6 +352,7 @@ app.post('/api/users/removeFromGroup', checkJwt, async (req, res) => {
   const {user_id, group_id} = req.body
   try {
     await GroupMembership.findOneAndDelete({group_id: group_id, user_id: user_id})
+    await Notification.deleteMany({room_id: group_id, user_id: user_id})
     res.send({status: 0})
   }
   catch (err){
@@ -386,6 +387,7 @@ app.post('/api/users/deleteGroup', checkJwt, async (req, res) => {
     await GroupInfo.findOneAndDelete({group_id: group_id})
     await GroupMembership.deleteMany({group_id: group_id})
     await Message.deleteMany({room_id: group_id})
+    await Notification.deleteMany({room_id: group_id})
     res.send({status: 0})
   }
   catch (err){
@@ -435,19 +437,23 @@ io.on("connection", socket => {
     var users_to_notify;
     if (isGroup){
       verify = await GroupMembership.findOne({group_id: room, user_id: user_id})
-      users_to_notify = await GroupMembership.find({group_id: room})
-      users_to_notify = users_to_notify.filter((user) => user.user_id !== user_id).map((user) => user.user_id)
+      if (verify){
+        users_to_notify = await GroupMembership.find({group_id: room})
+        users_to_notify = users_to_notify.filter((user) => user.user_id !== user_id).map((user) => user.user_id)
+      }
     }
     else{
       verify = await Friendship.findOne({friendships_id: room})
-      users_to_notify = [verify].map((user) => {
-        if (user.user1_id === user_id){
-          return user.user2_id;
-        }
-        else{
-          return user.user1_id;
-        }
-      })
+      if (verify){
+        users_to_notify = [verify].map((user) => {
+          if (user.user1_id === user_id){
+            return user.user2_id;
+          }
+          else{
+            return user.user1_id;
+          }
+        })
+      }
     }
     
     if (verify){
@@ -477,9 +483,9 @@ io.on("connection", socket => {
         io.in(room).emit("receive-message", new_message)
         
         users_to_notify.forEach(async (user) => {
-            const already_notified = await Nofification.findOne({room_id: room, user_id: user})
+            const already_notified = await Notification.findOne({room_id: room, user_id: user})
             if (!already_notified){
-              const notification = new Nofification({
+              const notification = new Notification({
                 notification_id: uuid.v4(),
                 user_id: user,
                 room_id: room,
@@ -541,6 +547,6 @@ io.on("connection", socket => {
   })
 
   socket.on("clear-notifications", async (room, user_id) => {
-    await Nofification.findOneAndDelete({room_id: room, user_id: user_id})
+    await Notification.findOneAndDelete({room_id: room, user_id: user_id})
   })
 })

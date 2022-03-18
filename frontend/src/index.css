@@ -20,6 +20,7 @@
   --default-colour-22: rgb(116, 15, 15);
   --default-colour-23: rgb(9, 46, 4);
   --font-family: "Poppins", sans-serif;
+  --home-font-family: "M PLUS 1", sans-serif;
   --message-font-family: "Work Sans", sans-serif;
 }
 
@@ -32,7 +33,7 @@ body {
   background-size: cover;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 550px) {
   body {
     background: url("./resources/02_vertical.png");
     background-size: cover;

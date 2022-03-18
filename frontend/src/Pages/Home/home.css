@@ -6,6 +6,30 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  background: rgb(0, 0, 0);
+  background: radial-gradient(
+    ellipse at right bottom,
+    rgba(28, 0, 48, 1) 34%,
+    rgba(0, 0, 0, 1) 100%
+  );
+
+  font-family: var(--home-font-family);
+  color: var(--default-colour-15);
+}
+
+.home_main-title {
+  position: relative;
+  width: 100%;
+  height: 50%;
+}
+
+.home_main-logo {
+  position: absolute;
+  top: 0%;
+  left: 80%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
 }
 
 .home_main-section {
@@ -33,12 +57,4 @@
   text-shadow: 2px 0 #000000;
   font-size: 90px;
   z-index: 9;
-}
-
-#moon {
-  mix-blend-mode: screen;
-}
-
-#mountains_front {
-  z-index: 10;
 }

@@ -81,6 +81,18 @@
   transition: 0.5s;
 }
 
+.message_username {
+  font-size: 15px;
+  margin: -2px 0;
+  padding: 0 40px;
+  text-align: left;
+  color: var(--default-colour-14);
+}
+
+.message_sender {
+  text-align: right;
+}
+
 .message-box {
   width: auto;
   margin: 0.2em;

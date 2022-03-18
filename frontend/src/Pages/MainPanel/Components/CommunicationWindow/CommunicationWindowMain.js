@@ -24,19 +24,24 @@ const CommunicationWindowMain = () => {
     }
   }
 
-  const Message = ({mess}) => {
-    const sender_image = (comCon.friendImage.find((friend) => friend.user_id === mess.sender_id) || {image: ''})
+  const Message = ({mess, number}) => {
+    const sender_info = (comCon.receiversInfo.find((friend) => friend.user_id === mess.sender_id) || {username: '', image: ''})
+    const sender_icon = (mess.sender_id === AuthCon.authState.userInfo.id ? AuthCon.authState.userInfo.image : sender_info.image)
+
     if (!mess.alert){
-      return <div className={`message-box ${mess.sender_id === AuthCon.authState.userInfo.id && 'sender'}`}>
-          <div className='message'>
-            <h2>{mess.text}</h2>
+      return <>
+          {(number === 0 || comCon.messages[number - 1].alert || comCon.messages[number - 1].sender_id !== mess.sender_id) &&
+          <h2 className={`message_username ${mess.sender_id === AuthCon.authState.userInfo.id && 'message_sender'}`}>{sender_info.username}</h2>}
+          <div className={`message-box ${mess.sender_id === AuthCon.authState.userInfo.id && 'sender'}`}>
+            <div className='message'>
+              <h2>{mess.text}</h2>
+            </div>
+            {(number === comCon.messages.length - 1 || comCon.messages[number + 1].alert || comCon.messages[number + 1].sender_id !== mess.sender_id) ?
+            (sender_icon !== '' ? <img className='message-picture' src={sender_icon} alt='pic'/> 
+            : <BsPersonFill className='message-picture_dummy'></BsPersonFill>) :
+            <div className='message-picture_dummy'></div>}
           </div>
-          {mess.sender_id === AuthCon.authState.userInfo.id ?
-          (AuthCon.authState.userInfo.image !== '' ? <img className='message-picture' src={AuthCon.authState.userInfo.image} alt='pic'/> 
-          : <BsPersonFill className='message-picture_dummy'></BsPersonFill>)
-          :(sender_image.image !== '' ? <img className='message-picture' src={sender_image.image} alt='pic'/> 
-          : <BsPersonFill className='message-picture_dummy'></BsPersonFill>)}
-        </div>
+        </>
     }
     else{
       return <div className='message-box'>
@@ -54,9 +59,9 @@ const CommunicationWindowMain = () => {
               {comCon.loadingMoreMessages && <Loading/>}
             </div>
             {comCon.loading? <div className='communication-main_loading'><Loading className='loading'/></div> :
-            comCon.messages.map((mess) => {
+            comCon.messages.map((mess, nr) => {
               return <div key={mess.message_id} id={mess.message_id === comCon.messages[0].message_id ? 'message-last' : (mess.message_id === comCon.messages[comCon.messages.length - 1].message_id ? 'message-first' : 'message')}>
-                <Message mess={mess}/>
+                <Message mess={mess} number={nr}/>
               </div>
             })}
           <div ref={comCon.dummy}></div>
