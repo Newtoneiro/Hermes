@@ -7,6 +7,7 @@
   --default-colour-1: rgb(215, 70, 145);
   --default-colour-2: rgb(115, 30, 251);
   --default-colour-3: rgb(158, 59, 224);
+  --default-colour-4: rgb(72, 50, 219);
 
   --default-colour-10: rgb(15, 15, 15);
   --default-colour-11: rgb(28, 28, 28);
@@ -22,6 +23,7 @@
   --font-family: "Poppins", sans-serif;
   --home-font-family: "M PLUS 1", sans-serif;
   --message-font-family: "Work Sans", sans-serif;
+  --huge-font-family: "Staatliches", cursive;
 }
 
 body {

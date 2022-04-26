@@ -39,6 +39,7 @@
   justify-content: flex-start;
 
   border-right: solid 1px black;
+  z-index: 300;
 }
 
 .Sidepanel_navbar {

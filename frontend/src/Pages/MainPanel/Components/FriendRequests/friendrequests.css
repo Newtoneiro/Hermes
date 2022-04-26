@@ -12,6 +12,7 @@
 
   animation: slide-left 0.7s;
   overflow-y: scroll;
+  z-index: 10;
 }
 
 .FriendRequests_main h2 {

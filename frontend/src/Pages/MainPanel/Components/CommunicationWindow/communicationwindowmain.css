@@ -19,7 +19,10 @@
   width: 100%;
   height: 100%;
 
-  background: var(--default-colour-11);
+  /* background: var(--default-colour-11); */
+  background: url("../../../../resources/bground.jpg");
+  background-size: cover;
+  background-attachment: fixed;
 
   overflow-y: scroll;
 
@@ -133,6 +136,8 @@
   color: var(--default-colour-15);
   font-family: var(--message-font-family);
   font-weight: 100;
+
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .message-alert {
@@ -182,6 +187,12 @@
   color: var(--default-colour-15);
   border-radius: 50%;
   border: solid 1px var(--default-colour-10);
+}
+
+.message-picture_empty {
+  margin: 0 0.2em;
+  width: 30px;
+  height: 30px;
 }
 
 .communication-main_loading {

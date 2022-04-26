@@ -39,7 +39,7 @@ const CommunicationWindowMain = () => {
             {(number === comCon.messages.length - 1 || comCon.messages[number + 1].alert || comCon.messages[number + 1].sender_id !== mess.sender_id) ?
             (sender_icon !== '' ? <img className='message-picture' src={sender_icon} alt='pic'/> 
             : <BsPersonFill className='message-picture_dummy'></BsPersonFill>) :
-            <div className='message-picture_dummy'></div>}
+            <div className='message-picture_empty'></div>}
           </div>
         </>
     }
