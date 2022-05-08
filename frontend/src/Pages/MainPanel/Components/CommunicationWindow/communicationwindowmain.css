@@ -222,6 +222,10 @@
   .message-alert {
     font-size: 8px;
   }
+
+  .communicaiton-main_messages {
+    background: var(--default-colour-11);
+  }
 }
 
 .communication-main_messages-loadMoreCatcher {

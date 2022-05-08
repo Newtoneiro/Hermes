@@ -1,5 +1,4 @@
 .home_main {
-  overflow: hidden;
   width: 100%;
   height: auto;
   min-height: 100vh;
@@ -359,8 +358,18 @@
     display: none;
   }
 
+  .home_main-box {
+    min-height: 75vh;
+  }
+
   .home_main-box_text h1 {
     font-size: 40px;
+  }
+
+  .home_main-bottom {
+    position: relative;
+    top: 0;
+    height: auto;
   }
 
   .home_main-box_text h4 {
